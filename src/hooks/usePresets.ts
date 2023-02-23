@@ -1,5 +1,5 @@
-import * as React from 'react';
 import warning from 'rc-util/lib/warning';
+import * as React from 'react';
 import type { PresetDate } from '../interface';
 
 export default function usePresets<T>(

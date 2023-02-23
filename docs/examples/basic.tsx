@@ -1,24 +1,24 @@
-import React from 'react';
 import type { Moment } from 'moment';
 import moment from 'moment';
-import Picker from '../../src/Picker';
-import momentGenerateConfig from '../../src/generate/moment';
-import zhCN from '../../src/locale/zh_CN';
-import enUS from '../../src/locale/en_US';
+import React from 'react';
 import '../../assets/index.less';
+import momentGenerateConfig from '../../src/generate/moment';
+import enUS from '../../src/locale/en_US';
+import zhCN from '../../src/locale/zh_CN';
+import Picker from '../../src/Picker';
 
 // const defaultValue = moment('2019-09-03 05:02:03');
 const defaultValue = moment('2019-11-28 01:02:03');
 
 export default () => {
-  const [value, setValue] = React.useState<Moment | null>(defaultValue);
+  const [value, setValue] = React.useState<Moment | null | string>(defaultValue);
   const weekRef = React.useRef<Picker<Moment>>(null);
 
-  const onSelect = (newValue: Moment) => {
+  const onSelect = (newValue: Moment | string) => {
     console.log('Select:', newValue);
   };
 
-  const onChange = (newValue: Moment | null, formatString?: string) => {
+  const onChange = (newValue: Moment | string | null, formatString?: string) => {
     console.log('Change:', newValue, formatString);
     setValue(newValue);
   };
@@ -33,6 +33,14 @@ export default () => {
         label: 'Hello World!',
         value: moment(),
       },
+      {
+        label: '今天',
+        value: 'today',
+      },
+      {
+        label: '明天',
+        value: 'tomorrow',
+      },
     ],
   };
 
@@ -42,13 +50,16 @@ export default () => {
 
   return (
     <div>
-      <h1>Value: {value ? value.format('YYYY-MM-DD HH:mm:ss') : 'null'}</h1>
+      <h1>
+        Value:{' '}
+        {value ? (typeof value === 'string' ? value : value.format('YYYY-MM-DD HH:mm:ss')) : 'null'}
+      </h1>
 
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         <div style={{ margin: '0 8px' }}>
           <h3>Basic</h3>
-          <Picker<Moment> {...sharedProps} locale={zhCN} />
-          <Picker<Moment> {...sharedProps} locale={enUS} />
+          <Picker<Moment | string> {...sharedProps} locale={zhCN} />
+          <Picker<Moment | string> {...sharedProps} locale={enUS} />
         </div>
         <div style={{ margin: '0 8px' }}>
           <h3>Uncontrolled</h3>
@@ -62,7 +73,7 @@ export default () => {
         </div>
         <div style={{ margin: '0 8px' }}>
           <h3>Datetime</h3>
-          <Picker<Moment>
+          <Picker<Moment | string>
             {...sharedProps}
             locale={zhCN}
             defaultPickerValue={defaultValue.clone().subtract(1, 'month')}
@@ -72,7 +83,7 @@ export default () => {
             }}
             showToday
             disabledTime={(date) => {
-              if (date && date.isSame(defaultValue, 'date')) {
+              if (date && typeof date !== 'string' && date.isSame(defaultValue, 'date')) {
                 return {
                   disabledHours: () => [1, 3, 5, 7, 9, 11],
                 };
@@ -92,7 +103,7 @@ export default () => {
         </div>
         <div style={{ margin: '0 8px' }}>
           <h3>Week</h3>
-          <Picker<Moment>
+          <Picker<Moment | string>
             {...sharedProps}
             locale={zhCN}
             allowClear
@@ -122,23 +133,23 @@ export default () => {
         </div>
         <div style={{ margin: '0 8px' }}>
           <h3>Time</h3>
-          <Picker<Moment> {...sharedProps} locale={zhCN} picker="time" />
+          <Picker<Moment | string> {...sharedProps} locale={zhCN} picker="time" />
         </div>
         <div style={{ margin: '0 8px' }}>
           <h3>Time 12</h3>
-          <Picker<Moment> {...sharedProps} locale={zhCN} picker="time" use12Hours />
+          <Picker<Moment | string> {...sharedProps} locale={zhCN} picker="time" use12Hours />
         </div>
         <div style={{ margin: '0 8px' }}>
           <h3>Year</h3>
-          <Picker<Moment> {...sharedProps} locale={zhCN} picker="year" />
+          <Picker<Moment | string> {...sharedProps} locale={zhCN} picker="year" />
         </div>
         <div style={{ margin: '0 8px' }}>
           <h3>Keyboard navigation (Tab key) disabled</h3>
-          <Picker<Moment> {...sharedProps} locale={enUS} tabIndex={-1} />
+          <Picker<Moment | string> {...sharedProps} locale={enUS} tabIndex={-1} />
         </div>
         <div style={{ margin: '0 8px' }}>
           <h3>Keyboard event with prevent default behaviors</h3>
-          <Picker<Moment> {...sharedProps} locale={enUS} onKeyDown={keyDown} />
+          <Picker<Moment | string> {...sharedProps} locale={enUS} onKeyDown={keyDown} />
         </div>
       </div>
     </div>

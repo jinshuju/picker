@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { ValueTextConfig } from './useValueTexts';
 import useValueTexts from './useValueTexts';
 

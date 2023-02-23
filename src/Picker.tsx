@@ -196,7 +196,6 @@ function InnerPicker<DateType>(props: PickerProps<DateType>) {
   }
 
   // ============================= State =============================
-  const formatList = toArray(getDefaultFormat(format, picker, showTime, use12Hours));
 
   // Panel ref
   const panelDivRef = React.useRef<HTMLDivElement>(null);
@@ -211,6 +210,8 @@ function InnerPicker<DateType>(props: PickerProps<DateType>) {
 
   // Selected value
   const [selectedValue, setSelectedValue] = React.useState<DateType | null>(mergedValue);
+
+  const formatList = toArray(getDefaultFormat(format, picker, showTime, use12Hours));
 
   // Operation ref
   const operationRef: React.MutableRefObject<ContextOperationRefProps | null> =
@@ -235,6 +236,7 @@ function InnerPicker<DateType>(props: PickerProps<DateType>) {
   // ============================= Text ==============================
   const [valueTexts, firstValueText] = useValueTexts(selectedValue, {
     formatList,
+    presetList,
     generateConfig,
     locale,
   });
@@ -257,6 +259,17 @@ function InnerPicker<DateType>(props: PickerProps<DateType>) {
   const triggerChange = (newValue: DateType | null) => {
     setSelectedValue(newValue);
     setInnerValue(newValue);
+
+    if (typeof newValue === 'string') {
+      return onChange?.(newValue, newValue);
+    }
+
+    if (typeof mergedValue === 'string' && typeof newValue !== 'string') {
+      return onChange?.(
+        newValue,
+        newValue ? formatValue(newValue, { generateConfig, locale, format: formatList[0] }) : '',
+      );
+    }
 
     if (onChange && !isEqual(generateConfig, mergedValue, newValue)) {
       onChange(
@@ -415,7 +428,7 @@ function InnerPicker<DateType>(props: PickerProps<DateType>) {
         className={classNames({
           [`${prefixCls}-panel-focused`]: !typing,
         })}
-        value={selectedValue}
+        value={typeof selectedValue === 'string' ? null : selectedValue}
         locale={locale}
         tabIndex={-1}
         onSelect={(date) => {

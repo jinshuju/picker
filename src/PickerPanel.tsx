@@ -5,39 +5,39 @@
  *  Panel change will not trigger `onSelect` but trigger `onPanelChange`
  */
 
-import * as React from 'react';
 import classNames from 'classnames';
+import useMergedState from 'rc-util/lib/hooks/useMergedState';
 import KeyCode from 'rc-util/lib/KeyCode';
 import warning from 'rc-util/lib/warning';
-import useMergedState from 'rc-util/lib/hooks/useMergedState';
-import type { SharedTimeProps } from './panels/TimePanel';
-import TimePanel from './panels/TimePanel';
-import DatetimePanel from './panels/DatetimePanel';
-import DatePanel from './panels/DatePanel';
-import WeekPanel from './panels/WeekPanel';
-import MonthPanel from './panels/MonthPanel';
-import QuarterPanel from './panels/QuarterPanel';
-import YearPanel from './panels/YearPanel';
-import DecadePanel from './panels/DecadePanel';
+import * as React from 'react';
 import type { GenerateConfig } from './generate';
 import type {
+  Components,
+  DisabledTime,
   Locale,
+  OnPanelChange,
   PanelMode,
   PanelRefProps,
   PickerMode,
-  DisabledTime,
-  OnPanelChange,
-  Components,
 } from './interface';
-import { isEqual } from './utils/dateUtil';
 import PanelContext from './PanelContext';
+import DatePanel from './panels/DatePanel';
 import type { DateRender } from './panels/DatePanel/DateBody';
-import { PickerModeMap } from './utils/uiUtil';
+import DatetimePanel from './panels/DatetimePanel';
+import DecadePanel from './panels/DecadePanel';
+import MonthPanel from './panels/MonthPanel';
 import type { MonthCellRender } from './panels/MonthPanel/MonthBody';
+import QuarterPanel from './panels/QuarterPanel';
+import type { SharedTimeProps } from './panels/TimePanel';
+import TimePanel from './panels/TimePanel';
+import WeekPanel from './panels/WeekPanel';
+import YearPanel from './panels/YearPanel';
 import RangeContext from './RangeContext';
+import { isEqual } from './utils/dateUtil';
 import getExtraFooter from './utils/getExtraFooter';
 import getRanges from './utils/getRanges';
 import { getLowerBoundTime, setDateTime, setTime } from './utils/timeUtil';
+import { PickerModeMap } from './utils/uiUtil';
 
 export type PickerPanelSharedProps<DateType> = {
   prefixCls?: string;

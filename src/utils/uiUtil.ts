@@ -1,6 +1,6 @@
+import isVisible from 'rc-util/lib/Dom/isVisible';
 import KeyCode from 'rc-util/lib/KeyCode';
 import raf from 'rc-util/lib/raf';
-import isVisible from 'rc-util/lib/Dom/isVisible';
 import type { GenerateConfig } from '../generate';
 import type { CustomFormat, PanelMode, PickerMode } from '../interface';
 
@@ -151,6 +151,7 @@ export function getDefaultFormat<DateType>(
   use12Hours: boolean | undefined,
 ) {
   let mergedFormat = format;
+
   if (!mergedFormat) {
     switch (picker) {
       case 'time':

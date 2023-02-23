@@ -1,22 +1,29 @@
 import useMemo from 'rc-util/lib/hooks/useMemo';
 import shallowEqual from 'rc-util/lib/isEqual';
 import type { GenerateConfig } from '../generate';
-import type { CustomFormat, Locale } from '../interface';
-import { formatValue, isEqual } from '../utils/dateUtil';
+import type { CustomFormat, Locale, PresetDate } from '../interface';
+import { formatValue } from '../utils/dateUtil';
 
 export type ValueTextConfig<DateType> = {
   formatList: (string | CustomFormat<DateType>)[];
   generateConfig: GenerateConfig<DateType>;
+  presetList?: PresetDate<DateType>[];
   locale: Locale;
 };
 
 export default function useValueTexts<DateType>(
   value: DateType | null,
-  { formatList, generateConfig, locale }: ValueTextConfig<DateType>,
+  { formatList, generateConfig, presetList, locale }: ValueTextConfig<DateType>,
 ) {
   return useMemo<[string[], string]>(
     () => {
       if (!value) {
+        return [[''], ''];
+      }
+
+      if (typeof value === 'string') {
+        const item = presetList?.find((presetItem) => presetItem.value === value);
+        if (item) return [[item.label.toString()], item.label.toString()];
         return [[''], ''];
       }
 
@@ -36,11 +43,13 @@ export default function useValueTexts<DateType>(
 
       return [fullValueTexts, firstValueText];
     },
-    [value, formatList],
+    [value, formatList, presetList],
     (prev, next) =>
       // Not Same Date
-      !isEqual(generateConfig, prev[0], next[0]) ||
+      prev[0] !== next[0] ||
       // Not Same format
-      !shallowEqual(prev[1], next[1], true),
+      !shallowEqual(prev[1], next[1], true) ||
+      // Not Same format
+      !shallowEqual(prev[2], next[2], true),
   );
 }
