@@ -12,13 +12,13 @@ import warning from 'rc-util/lib/warning';
 import * as React from 'react';
 import type { GenerateConfig } from './generate';
 import type {
-  Components,
-  DisabledTime,
-  Locale,
-  OnPanelChange,
-  PanelMode,
-  PanelRefProps,
-  PickerMode,
+Components,
+DisabledTime,
+Locale,
+OnPanelChange,
+PanelMode,
+PanelRefProps,
+PickerMode
 } from './interface';
 import PanelContext from './PanelContext';
 import DatePanel from './panels/DatePanel';
@@ -36,7 +36,7 @@ import RangeContext from './RangeContext';
 import { isEqual } from './utils/dateUtil';
 import getExtraFooter from './utils/getExtraFooter';
 import getRanges from './utils/getRanges';
-import { getLowerBoundTime, setDateTime, setTime } from './utils/timeUtil';
+import { getLowerBoundTime,setDateTime,setTime } from './utils/timeUtil';
 import { PickerModeMap } from './utils/uiUtil';
 
 export type PickerPanelSharedProps<DateType> = {
