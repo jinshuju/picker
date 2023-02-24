@@ -487,10 +487,13 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
     ) {
       // Delay to focus to avoid input blur trigger expired selectedValues
       triggerOpenAndFocus(nextOpenIndex);
+    } else if (!showTime) {
+      triggerOpen(false, sourceIndex);
+      triggerConfirm(values);
     }
   }
 
-  const triggerConfirm = (newValue: RangeValue<DateType>) => {
+  function triggerConfirm(newValue: RangeValue<DateType>) {
     const values = newValue;
     const startValue = getValue(values, 0);
     const endValue = getValue(values, 1);
@@ -522,7 +525,7 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
 
     // close
     triggerOpen(false, mergedActivePickerIndex);
-  };
+  }
 
   const forwardKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
     if (mergedOpen && operationRef.current && operationRef.current.onKeyDown) {
@@ -559,14 +562,12 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
   );
 
   const onTextChange = (newText: string, index: 0 | 1) => {
-    console.log('newText', newText);
     const inputDate = parseValue(newText, {
       locale,
       formatList,
       generateConfig,
     });
 
-    console.log('inputDate', inputDate);
     const disabledFunc = index === 0 ? disabledStartDate : disabledEndDate;
 
     if (inputDate && !disabledFunc(inputDate)) {
@@ -682,7 +683,6 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
     },
   });
 
-  // console.log('startTyping', startTyping, 'endTyping', endTyping)
   // ========================== Click Picker ==========================
   const onPickerClick = (e: React.MouseEvent<HTMLDivElement>) => {
     // When click inside the picker & outside the picker's input elements
@@ -1008,21 +1008,25 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
           >
             {panels}
           </div>
-          <RangeSelect<DateType>
-            value={selectedValue}
-            generateConfig={generateConfig}
-            locale={locale}
-            open={mergedOpen}
-            disabled={mergedDisabled}
-            onTextChange={onTextChange}
-            setMergedActivePickerIndex={setMergedActivePickerIndex}
-            onChange={(newValue, notNext) =>
-              triggerChange(newValue, mergedActivePickerIndex, notNext)
-            }
-          />
-          <div>
-            <button onClick={() => triggerConfirm(selectedValue)}>确认</button>
-          </div>
+          {picker === 'date' && showTime && (
+            <>
+              <RangeSelect<DateType>
+                value={selectedValue}
+                generateConfig={generateConfig}
+                locale={locale}
+                open={mergedOpen}
+                disabled={mergedDisabled}
+                onTextChange={onTextChange}
+                setMergedActivePickerIndex={setMergedActivePickerIndex}
+                onChange={(newValue, notNext) =>
+                  triggerChange(newValue, mergedActivePickerIndex, notNext)
+                }
+              />
+              <div>
+                <button onClick={() => triggerConfirm(selectedValue)}>确定</button>
+              </div>
+            </>
+          )}
           {(extraNode || rangesNode) && (
             <div className={`${prefixCls}-footer`}>
               {extraNode}
