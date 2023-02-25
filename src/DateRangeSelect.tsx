@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import type { GenerateConfig } from './generate';
 import useTextValueMapping from './hooks/useTextValueMapping';
 import useValueTexts from './hooks/useValueTexts';
-import type { Locale, OnSelect, RangeValue } from './interface';
+import type { Components, Locale, OnSelect, RangeValue } from './interface';
 import type { RangeShowTimeObject } from './RangePicker';
 import type { Unit } from './TimeUnitSelect';
 import TimeUnitSelect from './TimeUnitSelect';
@@ -58,6 +58,7 @@ const secondStep = 1;
 
 type TimeSelectProps<DateType> = {
   prefixCls: string;
+  selectPrefixCls: string;
   value: DateType;
   use12Hours?: boolean;
   showSecond?: boolean;
@@ -68,8 +69,17 @@ type TimeSelectProps<DateType> = {
 };
 
 function TimeSelect<DateType>(props: TimeSelectProps<DateType>) {
-  const { value, use12Hours, generateConfig, showSecond, disabled, onSelect, onFocus, prefixCls } =
-    props;
+  const {
+    value,
+    use12Hours,
+    generateConfig,
+    showSecond,
+    disabled,
+    onSelect,
+    onFocus,
+    prefixCls,
+    selectPrefixCls,
+  } = props;
   const { hour, isPM, minute, second } = React.useMemo(
     () => getTimeInfo<DateType>(value, generateConfig, { use12Hours }),
     [value, generateConfig, use12Hours],
@@ -124,6 +134,7 @@ function TimeSelect<DateType>(props: TimeSelectProps<DateType>) {
     <div className={`${prefixCls}-datetime-select`}>
       <TimeUnitSelect
         prefixCls={prefixCls}
+        selectPrefixCls={selectPrefixCls}
         className={`${prefixCls}-unit-select`}
         value={hour}
         units={hours}
@@ -135,6 +146,7 @@ function TimeSelect<DateType>(props: TimeSelectProps<DateType>) {
       />
       <TimeUnitSelect
         prefixCls={prefixCls}
+        selectPrefixCls={selectPrefixCls}
         className={`${prefixCls}-unit-select`}
         value={minute}
         units={minutes}
@@ -146,6 +158,7 @@ function TimeSelect<DateType>(props: TimeSelectProps<DateType>) {
       />
       {showSecond && (
         <TimeUnitSelect
+          selectPrefixCls={selectPrefixCls}
           className={`${prefixCls}-unit-select`}
           prefixCls={prefixCls}
           value={second}
@@ -163,6 +176,7 @@ function TimeSelect<DateType>(props: TimeSelectProps<DateType>) {
 
 export type DateRangeSelectProps<DateType> = {
   prefixCls: string;
+  selectPrefixCls: string;
   value?: RangeValue<DateType>;
   index?: 0 | 1;
   generateConfig: GenerateConfig<DateType>;
@@ -174,6 +188,7 @@ export type DateRangeSelectProps<DateType> = {
   showTime?: boolean | RangeShowTimeObject<DateType>;
   onTextChange?: (newText: string, index: 0 | 1, dateFormat?: string) => void;
   open?: boolean;
+  components?: Components;
   setActivePickerIndex: (index: 0 | 1) => void;
   onFocus?: React.FocusEventHandler<HTMLElement>;
 };
@@ -205,8 +220,10 @@ function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
     generateConfig,
     onFocus,
     showTime,
+    components,
     setActivePickerIndex,
     prefixCls,
+    selectPrefixCls,
   } = props;
   const start = getValue(value, 0);
   const end = getValue(value, 1);
@@ -275,12 +292,14 @@ function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, startValueTexts, endValueTexts]);
 
+  const Input = (components?.input || 'input') as any;
+
   return (
     <div className={`${prefixCls}-quantum`}>
       <div className={`${prefixCls}-quantum-item ${prefixCls}-quantum-start`}>
         <div className={`${prefixCls}-quantum-label`}>{locale.dateRangeLabels[0]}</div>
         <div className={`${prefixCls}-quantum-content`}>
-          <input
+          <Input
             disabled={disabled?.[0]}
             readOnly={inputReadOnly}
             className={`${prefixCls}-day-input`}
@@ -295,6 +314,7 @@ function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
           />
           <TimeSelect
             prefixCls={prefixCls}
+            selectPrefixCls={selectPrefixCls}
             value={start}
             generateConfig={generateConfig}
             disabled={disabled?.[0]}
@@ -311,7 +331,7 @@ function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
       <div className={`${prefixCls}-quantum-item ${prefixCls}-quantum-end`}>
         <div className={`${prefixCls}-quantum-label`}>{locale.dateRangeLabels[1]}</div>
         <div className={`${prefixCls}-quantum-content`}>
-          <input
+          <Input
             disabled={disabled?.[1]}
             className={`${prefixCls}-day-input`}
             readOnly={inputReadOnly}
@@ -326,6 +346,7 @@ function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
           />
           <TimeSelect
             prefixCls={prefixCls}
+            selectPrefixCls={selectPrefixCls}
             value={end}
             disabled={disabled?.[1]}
             use12Hours={use12Hours}

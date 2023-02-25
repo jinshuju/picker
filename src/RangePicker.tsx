@@ -127,6 +127,7 @@ export type RangePickerSharedProps<DateType> = {
   /** @private Internal control of active picker. Do not use since it's private usage */
   activePickerIndex?: 0 | 1;
   dateRender?: RangeDateRender<DateType>;
+  selectPrefixCls: string;
   panelRender?: (originPanel: React.ReactNode) => React.ReactNode;
 };
 
@@ -185,6 +186,7 @@ type MergedRangePickerProps<DateType> = {
 function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
   const {
     prefixCls = 'rc-picker',
+    selectPrefixCls = 'rc-select',
     id,
     style,
     className,
@@ -795,7 +797,6 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
 
   // ============================ Ranges =============================
   const presetList = usePresets(presets, ranges);
-
   // ============================= Panel =============================
   function renderPanel(
     panelPosition: 'left' | 'right' | false = false,
@@ -985,6 +986,8 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
       panels = renderPanel();
     }
 
+    const Button = (components?.button || 'button') as any;
+
     let mergedNodes: React.ReactNode = (
       <div className={`${prefixCls}-panel-layout`}>
         <PresetPanel
@@ -1017,11 +1020,13 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
                 open={mergedOpen}
                 disabled={mergedDisabled}
                 prefixCls={prefixCls}
+                selectPrefixCls={selectPrefixCls}
                 onTextChange={onTextChange}
                 setActivePickerIndex={setMergedActivePickerIndex}
                 onChange={(newValue, notNext) => {
                   triggerChange(newValue, mergedActivePickerIndex, notNext);
                 }}
+                components={components}
                 showTime={showTime}
                 use12Hours={use12Hours}
                 onFocus={() => {
@@ -1029,12 +1034,13 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
                 }}
               />
               <div className={`${prefixCls}-operation`}>
-                <button
+                <Button
                   className={`${prefixCls}-confirm-btn`}
                   onClick={() => triggerConfirm(selectedValue)}
+                  disabled={!selectedValue?.[0] || !selectedValue?.[1]}
                 >
                   {locale.ok}
-                </button>
+                </Button>
               </div>
             </>
           )}

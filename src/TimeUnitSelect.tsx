@@ -11,6 +11,7 @@ export type Unit = {
 
 export type TimeUnitSelectProps = {
   prefixCls: string;
+  selectPrefixCls: string;
   className?: string;
   units: Unit[];
   value?: number;
@@ -21,19 +22,20 @@ export type TimeUnitSelectProps = {
 };
 
 function TimeUnitSelect(props: TimeUnitSelectProps) {
-  const { prefixCls, units, onChange, onFocus, disabled, className, value } = props;
+  const { prefixCls, selectPrefixCls, units, onChange, onFocus, disabled, className, value } =
+    props;
 
-  const selectPrefixCls = `${prefixCls}-select`;
   const selectRef = useRef<HTMLDivElement>(null);
 
   return (
     <div
       ref={selectRef}
-      className={classNames(`${selectPrefixCls}-wrapper`, className)}
+      className={classNames(`${prefixCls}-select-wrapper`, className)}
       style={{ position: 'relative' }}
     >
       <Select
         prefixCls={selectPrefixCls}
+        className={`${prefixCls}-select`}
         getPopupContainer={() => selectRef.current}
         value={value}
         showSearch
@@ -44,7 +46,7 @@ function TimeUnitSelect(props: TimeUnitSelectProps) {
         {units!.map((unit) => {
           return (
             <Option
-              className={`${selectPrefixCls}-option`}
+              className={`${prefixCls}-select-option`}
               disabled={unit.disabled}
               key={unit.value}
               value={unit.value}

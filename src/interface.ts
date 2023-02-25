@@ -98,6 +98,7 @@ export type RangeValue<DateType> = [EventValue<DateType>, EventValue<DateType>] 
 
 export type Components = {
   button?: React.ComponentType | string;
+  input?: React.ComponentType | string;
 };
 
 export type RangeList = {
