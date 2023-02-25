@@ -4,6 +4,7 @@ import warning from 'rc-util/lib/warning';
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import type { PickerPanelProps } from '.';
+import DateRangeSelect from './DateRangeSelect';
 import type { GenerateConfig } from './generate';
 import useHoverValue from './hooks/useHoverValue';
 import usePickerInput from './hooks/usePickerInput';
@@ -29,7 +30,6 @@ import PickerPanel from './PickerPanel';
 import PickerTrigger from './PickerTrigger';
 import PresetPanel from './PresetPanel';
 import RangeContext from './RangeContext';
-import DateRangeSelect from './DateRangeSelect';
 
 import {
   formatValue,
@@ -561,10 +561,10 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
     sharedTextHooksProps,
   );
 
-  const onTextChange = (newText: string, index: 0 | 1) => {
+  const onTextChange = (newText: string, index: 0 | 1, dateFormat?: string) => {
     const inputDate = parseValue(newText, {
       locale,
-      formatList,
+      formatList: dateFormat ? [dateFormat] : formatList,
       generateConfig,
     });
 
@@ -1016,17 +1016,24 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
                 locale={locale}
                 open={mergedOpen}
                 disabled={mergedDisabled}
+                prefixCls={prefixCls}
                 onTextChange={onTextChange}
                 setActivePickerIndex={setMergedActivePickerIndex}
                 onChange={(newValue, notNext) => {
                   triggerChange(newValue, mergedActivePickerIndex, notNext);
                 }}
+                use12Hours={use12Hours}
                 onFocus={() => {
                   setInnerModes(updateValues(mergedModes, 'date', mergedActivePickerIndex));
                 }}
               />
-              <div>
-                <button onClick={() => triggerConfirm(selectedValue)}>确定</button>
+              <div className={`${prefixCls}-operation`}>
+                <button
+                  className={`${prefixCls}-confirm-btn`}
+                  onClick={() => triggerConfirm(selectedValue)}
+                >
+                  确定
+                </button>
               </div>
             </>
           )}

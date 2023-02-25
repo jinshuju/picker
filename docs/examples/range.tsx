@@ -1,6 +1,5 @@
 import type { Moment } from 'moment';
 import moment from 'moment';
-import 'rc-select/assets/index.less';
 import React from 'react';
 import '../../assets/index.less';
 import momentGenerateConfig from '../../src/generate/moment';
@@ -8,8 +7,8 @@ import zhCN from '../../src/locale/zh_CN';
 import RangePicker from '../../src/RangePicker';
 import './common.less';
 
-const defaultStartValue = null;
-const defaultEndValue = null;
+const defaultStartValue = moment('2019-09-03 05:02:03');
+const defaultEndValue = moment('2023-08-03 02:12:06');
 
 function formatDate(date: Moment | null) {
   return date ? date.format('YYYY-MM-DD HH:mm:ss') : 'null';

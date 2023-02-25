@@ -1,3 +1,5 @@
+@import './select.less';
+
 @prefix-cls: rc-picker;
 
 @background-color: rgb(255, 240, 255);
@@ -483,4 +485,51 @@
     flex-wrap: nowrap;
     align-items: stretch;
   }
+}
+
+
+
+
+.@{prefix-cls}-quantum {
+  display: flex;
+}
+
+
+.@{prefix-cls}-quantum-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+
+.@{prefix-cls}-quantum-end {
+  margin-left: 12px;
+}
+
+.@{prefix-cls}-datetime-select {
+  display: flex;
+  align-items: center;
+  margin-left: 7px;
+}
+
+.@{prefix-cls}-unit-select {
+  width: 60px;
+
+  .@{prefix-cls}-select {
+    width: 100%;
+  }
+
+  &:not(:last-child) {
+    margin-right: 7px;
+  }
+}
+
+.@{prefix-cls}-quantum-content {
+  display: flex;
+  align-items: center;
+}
+
+.@{prefix-cls}-operation {
+  display: flex;
+  justify-content: flex-end;
 }

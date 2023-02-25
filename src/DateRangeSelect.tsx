@@ -43,7 +43,7 @@ function getTimeInfo<DateType>(
   const second = value ? generateConfig.getSecond(value) : null;
 
   // Should additional logic to handle 12 hours
-  if (options?.use12Hours) {
+  if (options?.use12Hours && hour !== null) {
     isPM = hour >= 12; // -1 means should display AM
     hour %= 12;
   }
@@ -56,15 +56,17 @@ const minuteStep = 1;
 const secondStep = 1;
 
 type TimeSelectProps<DateType> = {
+  prefixCls: string;
   value: DateType;
   use12Hours?: boolean;
   generateConfig?: GenerateConfig<DateType>;
   onSelect: OnSelect<DateType>;
   onFocus: React.FocusEventHandler<HTMLElement>;
+  disabled?: boolean;
 };
 
 function TimeSelect<DateType>(props: TimeSelectProps<DateType>) {
-  const { value, use12Hours, generateConfig, onSelect, onFocus } = props;
+  const { value, use12Hours, generateConfig, disabled, onSelect, onFocus, prefixCls } = props;
   const { hour, isPM, minute, second } = React.useMemo(
     () => getTimeInfo<DateType>(value, generateConfig, { use12Hours }),
     [value, generateConfig, use12Hours],
@@ -116,26 +118,35 @@ function TimeSelect<DateType>(props: TimeSelectProps<DateType>) {
   };
 
   return (
-    <div style={{ display: 'flex' }}>
+    <div className={`${prefixCls}-datetime-select`}>
       <TimeUnitSelect
+        prefixCls={prefixCls}
+        className={`${prefixCls}-unit-select`}
         value={hour}
         units={hours}
+        disabled={disabled}
         onChange={(num) => {
           onSelect(setTime(isPM, num, minute, second), 'mouse');
         }}
         onFocus={onFocus}
       />
       <TimeUnitSelect
+        prefixCls={prefixCls}
+        className={`${prefixCls}-unit-select`}
         value={minute}
         units={minutes}
+        disabled={disabled}
         onChange={(num) => {
           onSelect(setTime(isPM, hour, num, second), 'mouse');
         }}
         onFocus={onFocus}
       />
       <TimeUnitSelect
+        className={`${prefixCls}-unit-select`}
+        prefixCls={prefixCls}
         value={second}
         units={seconds}
+        disabled={disabled}
         onChange={(num) => {
           onSelect(setTime(isPM, hour, minute, num), 'mouse');
         }}
@@ -146,6 +157,7 @@ function TimeSelect<DateType>(props: TimeSelectProps<DateType>) {
 }
 
 export type DateRangeSelectProps<DateType> = {
+  prefixCls: string;
   showSecond?: boolean;
   value?: RangeValue<DateType>;
   index?: 0 | 1;
@@ -155,7 +167,7 @@ export type DateRangeSelectProps<DateType> = {
   inputReadOnly?: boolean;
   onChange?: (values: RangeValue<DateType>, notNext?: boolean) => void;
   use12Hours?: boolean;
-  onTextChange?: (newText: string, index: 0 | 1) => void;
+  onTextChange?: (newText: string, index: 0 | 1, dateFormat?: string) => void;
   open?: boolean;
   setActivePickerIndex: (index: 0 | 1) => void;
   onFocus?: React.FocusEventHandler<HTMLElement>;
@@ -174,6 +186,7 @@ function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
     generateConfig,
     onFocus,
     setActivePickerIndex,
+    prefixCls,
   } = props;
   const start = getValue(value, 0);
   const end = getValue(value, 1);
@@ -205,6 +218,7 @@ function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
       onTextChange(
         `${newText} ${leftPad(startHour, 2)}:${leftPad(startMinute, 2)}:${leftPad(startSecond, 2)}`,
         0,
+        'YYYY-MM-DD HH:mm:ss',
       ),
   });
 
@@ -214,6 +228,7 @@ function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
       onTextChange(
         `${newText} ${leftPad(startHour, 2)}:${leftPad(startMinute, 2)}:${leftPad(startSecond, 2)}`,
         1,
+        'YYYY-MM-DD HH:mm:ss',
       ),
   });
 
@@ -234,52 +249,66 @@ function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
   }, [open, startValueTexts, endValueTexts]);
 
   return (
-    <div>
-      <div>
-        <input
-          disabled={disabled?.[0]}
-          readOnly={inputReadOnly}
-          value={startText}
-          onChange={(e) => {
-            triggerStartTextChange(e.target.value);
-          }}
-          onFocus={(e) => {
-            setActivePickerIndex(0);
-            onFocus?.(e);
-          }}
-        />
-        <TimeSelect
-          value={start}
-          generateConfig={generateConfig}
-          onSelect={(date: DateType) => onChange(updateValues(value, date, 0), true)}
-          onFocus={(e) => {
-            setActivePickerIndex(0);
-            onFocus?.(e);
-          }}
-        />
+    <div className={`${prefixCls}-quantum`}>
+      <div className={`${prefixCls}-quantum-item ${prefixCls}-quantum-start`}>
+        <div className={`${prefixCls}-quantum-label`}>开始时间</div>
+        <div className={`${prefixCls}-quantum-content`}>
+          <input
+            disabled={disabled?.[0]}
+            readOnly={inputReadOnly}
+            className={`${prefixCls}-day-input`}
+            value={startText}
+            onChange={(e) => {
+              triggerStartTextChange(e.target.value);
+            }}
+            onFocus={(e) => {
+              setActivePickerIndex(0);
+              onFocus?.(e);
+            }}
+          />
+          <TimeSelect
+            prefixCls={prefixCls}
+            value={start}
+            generateConfig={generateConfig}
+            disabled={disabled?.[0]}
+            use12Hours={use12Hours}
+            onSelect={(date: DateType) => onChange(updateValues(value, date, 0), true)}
+            onFocus={(e) => {
+              setActivePickerIndex(0);
+              onFocus?.(e);
+            }}
+          />
+        </div>
       </div>
-      <div>
-        <input
-          disabled={disabled?.[1]}
-          readOnly={inputReadOnly}
-          value={endText}
-          onChange={(e) => {
-            triggerEndTextChange(e.target.value);
-          }}
-          onFocus={(e) => {
-            setActivePickerIndex(1);
-            onFocus?.(e);
-          }}
-        />
-        <TimeSelect
-          value={end}
-          generateConfig={generateConfig}
-          onSelect={(date: DateType) => onChange(updateValues(value, date, 1), true)}
-          onFocus={(e) => {
-            setActivePickerIndex(1);
-            onFocus?.(e);
-          }}
-        />
+      <div className={`${prefixCls}-quantum-item ${prefixCls}-quantum-end`}>
+        <div className={`${prefixCls}-quantum-label`}>结束时间</div>
+        <div className={`${prefixCls}-quantum-content`}>
+          <input
+            disabled={disabled?.[1]}
+            className={`${prefixCls}-day-input`}
+            readOnly={inputReadOnly}
+            value={endText}
+            onChange={(e) => {
+              triggerEndTextChange(e.target.value);
+            }}
+            onFocus={(e) => {
+              setActivePickerIndex(1);
+              onFocus?.(e);
+            }}
+          />
+          <TimeSelect
+            prefixCls={prefixCls}
+            value={end}
+            disabled={disabled?.[1]}
+            use12Hours={use12Hours}
+            generateConfig={generateConfig}
+            onSelect={(date: DateType) => onChange(updateValues(value, date, 1), true)}
+            onFocus={(e) => {
+              setActivePickerIndex(1);
+              onFocus?.(e);
+            }}
+          />
+        </div>
       </div>
     </div>
   );
