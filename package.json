@@ -1,5 +1,5 @@
 {
-  "name": "@gd-uikit/rc-picker",
+  "name": "@gd-uikit/picker",
   "version": "3.3.0",
   "description": "React date & time picker",
   "keywords": [
@@ -36,6 +36,9 @@
     "test": "rc-test",
     "coverage": "father test --coverage",
     "now-build": "npm run build"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
   },
   "dependencies": {
     "@babel/runtime": "^7.10.1",
