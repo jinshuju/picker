@@ -157,9 +157,10 @@ export default function usePickerInput({
           preventBlurRef.current = true;
 
           // Always set back in case `onBlur` prevented by user
-          requestAnimationFrame(() => {
+          // TODO: Maybe until mouse up then trigger 'onBlur' event
+          setTimeout(() => {
             preventBlurRef.current = false;
-          });
+          }, 2000)
         } else if (!focused || clickedOutside) {
           triggerOpen(false);
         }
