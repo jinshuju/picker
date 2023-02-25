@@ -1038,6 +1038,7 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
                   className={`${prefixCls}-confirm-btn`}
                   onClick={() => triggerConfirm(selectedValue)}
                   disabled={!selectedValue?.[0] || !selectedValue?.[1]}
+                  size="middle"
                 >
                   {locale.ok}
                 </Button>

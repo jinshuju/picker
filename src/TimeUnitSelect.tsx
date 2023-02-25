@@ -42,6 +42,7 @@ function TimeUnitSelect(props: TimeUnitSelectProps) {
         disabled={disabled}
         onChange={onChange}
         onFocus={onFocus}
+        showArrow
       >
         {units!.map((unit) => {
           return (
