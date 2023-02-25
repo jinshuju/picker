@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import Select, { Option } from 'rc-select';
 import * as React from 'react';
 import { useRef } from 'react';
@@ -11,17 +10,17 @@ export type Unit = {
 
 export type TimeUnitSelectProps = {
   prefixCls?: string;
-  units?: Unit[];
+  units: Unit[];
   value?: number;
   active?: boolean;
   onChange?: (value: number) => void;
-  onFocus?: any;
+  onFocus?: React.FocusEventHandler<HTMLElement>;
 };
 
 function TimeUnitSelect(props: TimeUnitSelectProps) {
   const { prefixCls, units, onChange, onFocus, value } = props;
 
-  const cellPrefixCls = `${prefixCls}-cell`;
+  const optionPrefixCls = `${prefixCls}-option`;
   const selectRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -36,7 +35,7 @@ function TimeUnitSelect(props: TimeUnitSelectProps) {
         {units!.map((unit) => {
           return (
             <Option
-              className={classNames(cellPrefixCls)}
+              className={optionPrefixCls}
               disabled={unit.disabled}
               key={unit.value}
               value={unit.value}

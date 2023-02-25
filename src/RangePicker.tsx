@@ -29,7 +29,7 @@ import PickerPanel from './PickerPanel';
 import PickerTrigger from './PickerTrigger';
 import PresetPanel from './PresetPanel';
 import RangeContext from './RangeContext';
-import RangeSelect from './RangeSelect';
+import DateRangeSelect from './DateRangeSelect';
 
 import {
   formatValue,
@@ -1010,17 +1010,20 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
           </div>
           {picker === 'date' && showTime && (
             <>
-              <RangeSelect<DateType>
+              <DateRangeSelect<DateType>
                 value={selectedValue}
                 generateConfig={generateConfig}
                 locale={locale}
                 open={mergedOpen}
                 disabled={mergedDisabled}
                 onTextChange={onTextChange}
-                setMergedActivePickerIndex={setMergedActivePickerIndex}
-                onChange={(newValue, notNext) =>
-                  triggerChange(newValue, mergedActivePickerIndex, notNext)
-                }
+                setActivePickerIndex={setMergedActivePickerIndex}
+                onChange={(newValue, notNext) => {
+                  triggerChange(newValue, mergedActivePickerIndex, notNext);
+                }}
+                onFocus={() => {
+                  setInnerModes(updateValues(mergedModes, 'date', mergedActivePickerIndex));
+                }}
               />
               <div>
                 <button onClick={() => triggerConfirm(selectedValue)}>确定</button>

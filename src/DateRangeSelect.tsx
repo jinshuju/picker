@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import type { GenerateConfig } from './generate';
 import useTextValueMapping from './hooks/useTextValueMapping';
 import useValueTexts from './hooks/useValueTexts';
-import type { Locale, RangeValue } from './interface';
+import type { Locale, OnSelect, RangeValue } from './interface';
 import type { Unit } from './TimeUnitSelect';
 import TimeUnitSelect from './TimeUnitSelect';
 import { getValue, leftPad, updateValues } from './utils/miscUtil';
@@ -31,23 +31,25 @@ function shouldUnitsUpdate(prevUnits: Unit[], nextUnits: Unit[]) {
   return false;
 }
 
-const useTimeInfo = (value, use12Hours, generateConfig) => {
-  return React.useMemo(() => {
-    const originHour = value ? generateConfig.getHour(value) : -1;
-    let hour = originHour;
-    let isPM: boolean | undefined;
-    const minute = value ? generateConfig.getMinute(value) : -1;
-    const second = value ? generateConfig.getSecond(value) : -1;
+function getTimeInfo<DateType>(
+  value: DateType,
+  generateConfig: GenerateConfig<DateType>,
+  options?: { use12Hours?: boolean } | null | undefined,
+) {
+  const originHour = value ? generateConfig.getHour(value) : null;
+  let hour = originHour;
+  let isPM: boolean | undefined;
+  const minute = value ? generateConfig.getMinute(value) : null;
+  const second = value ? generateConfig.getSecond(value) : null;
 
-    // Should additional logic to handle 12 hours
-    if (use12Hours) {
-      isPM = hour >= 12; // -1 means should display AM
-      hour %= 12;
-    }
+  // Should additional logic to handle 12 hours
+  if (options?.use12Hours) {
+    isPM = hour >= 12; // -1 means should display AM
+    hour %= 12;
+  }
 
-    return { hour, minute, second, isPM };
-  }, [value, use12Hours, generateConfig]);
-};
+  return { hour, minute, second, isPM };
+}
 
 const hourStep = 1;
 const minuteStep = 1;
@@ -57,13 +59,16 @@ type TimeSelectProps<DateType> = {
   value: DateType;
   use12Hours?: boolean;
   generateConfig?: GenerateConfig<DateType>;
-  onSelect: any;
-  onFocus: any;
+  onSelect: OnSelect<DateType>;
+  onFocus: React.FocusEventHandler<HTMLElement>;
 };
 
 function TimeSelect<DateType>(props: TimeSelectProps<DateType>) {
   const { value, use12Hours, generateConfig, onSelect, onFocus } = props;
-  const { hour, isPM, minute, second } = useTimeInfo(value, use12Hours, generateConfig);
+  const { hour, isPM, minute, second } = React.useMemo(
+    () => getTimeInfo<DateType>(value, generateConfig, { use12Hours }),
+    [value, generateConfig, use12Hours],
+  );
 
   const rawHours = generateUnits(0, 23, hourStep);
   const memorizedRawHours = useMemo(() => rawHours, rawHours, shouldUnitsUpdate);
@@ -140,7 +145,7 @@ function TimeSelect<DateType>(props: TimeSelectProps<DateType>) {
   );
 }
 
-export type RangeSelectProps<DateType> = {
+export type DateRangeSelectProps<DateType> = {
   showSecond?: boolean;
   value?: RangeValue<DateType>;
   index?: 0 | 1;
@@ -150,12 +155,13 @@ export type RangeSelectProps<DateType> = {
   inputReadOnly?: boolean;
   onChange?: (values: RangeValue<DateType>, notNext?: boolean) => void;
   use12Hours?: boolean;
-  onTextChange?: any;
+  onTextChange?: (newText: string, index: 0 | 1) => void;
   open?: boolean;
-  setMergedActivePickerIndex: any;
+  setActivePickerIndex: (index: 0 | 1) => void;
+  onFocus?: React.FocusEventHandler<HTMLElement>;
 };
 
-function RangeSelect<DateType>(props: RangeSelectProps<DateType>) {
+function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
   const {
     value,
     onChange,
@@ -166,7 +172,8 @@ function RangeSelect<DateType>(props: RangeSelectProps<DateType>) {
     disabled,
     locale,
     generateConfig,
-    setMergedActivePickerIndex,
+    onFocus,
+    setActivePickerIndex,
   } = props;
   const start = getValue(value, 0);
   const end = getValue(value, 1);
@@ -175,7 +182,10 @@ function RangeSelect<DateType>(props: RangeSelectProps<DateType>) {
     hour: startHour,
     minute: startMinute,
     second: startSecond,
-  } = useTimeInfo(start, use12Hours, generateConfig);
+  } = React.useMemo(
+    () => getTimeInfo<DateType>(start, generateConfig, { use12Hours }),
+    [start, generateConfig, use12Hours],
+  );
 
   const [startValueTexts, firstStartValueText] = useValueTexts<DateType>(start, {
     locale,
@@ -220,49 +230,54 @@ function RangeSelect<DateType>(props: RangeSelectProps<DateType>) {
         resetEndText();
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, startValueTexts, endValueTexts]);
 
   return (
     <div>
       <div>
         <input
-          disabled={disabled[0]}
+          disabled={disabled?.[0]}
           readOnly={inputReadOnly}
           value={startText}
           onChange={(e) => {
             triggerStartTextChange(e.target.value);
           }}
-          onFocus={() => {
-            setMergedActivePickerIndex(0);
+          onFocus={(e) => {
+            setActivePickerIndex(0);
+            onFocus?.(e);
           }}
         />
         <TimeSelect
           value={start}
           generateConfig={generateConfig}
           onSelect={(date: DateType) => onChange(updateValues(value, date, 0), true)}
-          onFocus={() => {
-            setMergedActivePickerIndex(0);
+          onFocus={(e) => {
+            setActivePickerIndex(0);
+            onFocus?.(e);
           }}
         />
       </div>
       <div>
         <input
-          disabled={disabled?.[0]}
+          disabled={disabled?.[1]}
           readOnly={inputReadOnly}
           value={endText}
           onChange={(e) => {
             triggerEndTextChange(e.target.value);
           }}
-          onFocus={() => {
-            setMergedActivePickerIndex(1);
+          onFocus={(e) => {
+            setActivePickerIndex(1);
+            onFocus?.(e);
           }}
         />
         <TimeSelect
           value={end}
           generateConfig={generateConfig}
           onSelect={(date: DateType) => onChange(updateValues(value, date, 1), true)}
-          onFocus={() => {
-            setMergedActivePickerIndex(1);
+          onFocus={(e) => {
+            setActivePickerIndex(1);
+            onFocus?.(e);
           }}
         />
       </div>
@@ -270,4 +285,4 @@ function RangeSelect<DateType>(props: RangeSelectProps<DateType>) {
   );
 }
 
-export default RangeSelect;
+export default DateRangeSelect;
