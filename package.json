@@ -1,6 +1,6 @@
 {
-  "name": "@gd-uikit/rc-picker",
-  "version": "3.2.4",
+  "name": "@gd-uikit/picker",
+  "version": "3.3.0",
   "description": "React date & time picker",
   "keywords": [
     "react",
@@ -19,7 +19,7 @@
   "homepage": "https://react-component.github.io/picker",
   "repository": {
     "type": "git",
-    "url": "git@github.com:react-component/picker.git"
+    "url": "git@github.com:jinshuju/picker.git"
   },
   "bugs": {
     "url": "http://github.com/react-component/picker/issues"
@@ -36,6 +36,10 @@
     "test": "rc-test",
     "coverage": "father test --coverage",
     "now-build": "npm run build"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   },
   "dependencies": {
     "@babel/runtime": "^7.10.1",
