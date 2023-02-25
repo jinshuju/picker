@@ -151,7 +151,7 @@ type OmitPickerProps<Props> = Omit<
   | 'presets'
 >;
 
-type RangeShowTimeObject<DateType> = Omit<SharedTimeProps<DateType>, 'defaultValue'> & {
+export type RangeShowTimeObject<DateType> = Omit<SharedTimeProps<DateType>, 'defaultValue'> & {
   defaultValue?: DateType[];
 };
 
@@ -1022,6 +1022,7 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
                 onChange={(newValue, notNext) => {
                   triggerChange(newValue, mergedActivePickerIndex, notNext);
                 }}
+                showTime={showTime}
                 use12Hours={use12Hours}
                 onFocus={() => {
                   setInnerModes(updateValues(mergedModes, 'date', mergedActivePickerIndex));

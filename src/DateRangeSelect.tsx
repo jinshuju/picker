@@ -5,6 +5,7 @@ import type { GenerateConfig } from './generate';
 import useTextValueMapping from './hooks/useTextValueMapping';
 import useValueTexts from './hooks/useValueTexts';
 import type { Locale, OnSelect, RangeValue } from './interface';
+import type { RangeShowTimeObject } from './RangePicker';
 import type { Unit } from './TimeUnitSelect';
 import TimeUnitSelect from './TimeUnitSelect';
 import { getValue, leftPad, updateValues } from './utils/miscUtil';
@@ -59,6 +60,7 @@ type TimeSelectProps<DateType> = {
   prefixCls: string;
   value: DateType;
   use12Hours?: boolean;
+  showSecond?: boolean;
   generateConfig?: GenerateConfig<DateType>;
   onSelect: OnSelect<DateType>;
   onFocus: React.FocusEventHandler<HTMLElement>;
@@ -66,7 +68,8 @@ type TimeSelectProps<DateType> = {
 };
 
 function TimeSelect<DateType>(props: TimeSelectProps<DateType>) {
-  const { value, use12Hours, generateConfig, disabled, onSelect, onFocus, prefixCls } = props;
+  const { value, use12Hours, generateConfig, showSecond, disabled, onSelect, onFocus, prefixCls } =
+    props;
   const { hour, isPM, minute, second } = React.useMemo(
     () => getTimeInfo<DateType>(value, generateConfig, { use12Hours }),
     [value, generateConfig, use12Hours],
@@ -141,24 +144,25 @@ function TimeSelect<DateType>(props: TimeSelectProps<DateType>) {
         }}
         onFocus={onFocus}
       />
-      <TimeUnitSelect
-        className={`${prefixCls}-unit-select`}
-        prefixCls={prefixCls}
-        value={second}
-        units={seconds}
-        disabled={disabled}
-        onChange={(num) => {
-          onSelect(setTime(isPM, hour, minute, num), 'mouse');
-        }}
-        onFocus={onFocus}
-      />
+      {showSecond && (
+        <TimeUnitSelect
+          className={`${prefixCls}-unit-select`}
+          prefixCls={prefixCls}
+          value={second}
+          units={seconds}
+          disabled={disabled}
+          onChange={(num) => {
+            onSelect(setTime(isPM, hour, minute, num), 'mouse');
+          }}
+          onFocus={onFocus}
+        />
+      )}
     </div>
   );
 }
 
 export type DateRangeSelectProps<DateType> = {
   prefixCls: string;
-  showSecond?: boolean;
   value?: RangeValue<DateType>;
   index?: 0 | 1;
   generateConfig: GenerateConfig<DateType>;
@@ -167,11 +171,26 @@ export type DateRangeSelectProps<DateType> = {
   inputReadOnly?: boolean;
   onChange?: (values: RangeValue<DateType>, notNext?: boolean) => void;
   use12Hours?: boolean;
+  showTime?: boolean | RangeShowTimeObject<DateType>;
   onTextChange?: (newText: string, index: 0 | 1, dateFormat?: string) => void;
   open?: boolean;
   setActivePickerIndex: (index: 0 | 1) => void;
   onFocus?: React.FocusEventHandler<HTMLElement>;
 };
+
+function spliceDateText(
+  text: string,
+  hour: number | null,
+  minute: number | null,
+  second: number | null,
+) {
+  const hourStr = hour ? leftPad(hour, 2) : '00';
+  const minuteStr = minute ? leftPad(minute, 2) : '00';
+  const secondStr = second ? leftPad(second, 2) : '00';
+
+  const format = 'YYYY-MM-DD HH:mm:ss';
+  return [`${text} ${hourStr}:${minuteStr}:${secondStr}`, format];
+}
 
 function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
   const {
@@ -185,6 +204,7 @@ function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
     locale,
     generateConfig,
     onFocus,
+    showTime,
     setActivePickerIndex,
     prefixCls,
   } = props;
@@ -198,6 +218,15 @@ function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
   } = React.useMemo(
     () => getTimeInfo<DateType>(start, generateConfig, { use12Hours }),
     [start, generateConfig, use12Hours],
+  );
+
+  const {
+    hour: endHour,
+    minute: endMinute,
+    second: endSecond,
+  } = React.useMemo(
+    () => getTimeInfo<DateType>(end, generateConfig, { use12Hours }),
+    [end, generateConfig, use12Hours],
   );
 
   const [startValueTexts, firstStartValueText] = useValueTexts<DateType>(start, {
@@ -214,22 +243,20 @@ function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
 
   const [startText, triggerStartTextChange, resetStartText] = useTextValueMapping({
     valueTexts: startValueTexts,
-    onTextChange: (newText) =>
-      onTextChange(
-        `${newText} ${leftPad(startHour, 2)}:${leftPad(startMinute, 2)}:${leftPad(startSecond, 2)}`,
-        0,
-        'YYYY-MM-DD HH:mm:ss',
-      ),
+    onTextChange: (newText) => {
+      const [splicedText, format] = spliceDateText(newText, startHour, startMinute, startSecond);
+
+      onTextChange(splicedText, 0, format);
+    },
   });
 
   const [endText, triggerEndTextChange, resetEndText] = useTextValueMapping({
     valueTexts: endValueTexts,
-    onTextChange: (newText) =>
-      onTextChange(
-        `${newText} ${leftPad(startHour, 2)}:${leftPad(startMinute, 2)}:${leftPad(startSecond, 2)}`,
-        1,
-        'YYYY-MM-DD HH:mm:ss',
-      ),
+    onTextChange: (newText) => {
+      const [splicedText, format] = spliceDateText(newText, endHour, endMinute, endSecond);
+
+      onTextChange(splicedText, 1, format);
+    },
   });
 
   useEffect(() => {
@@ -273,6 +300,7 @@ function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
             disabled={disabled?.[0]}
             use12Hours={use12Hours}
             onSelect={(date: DateType) => onChange(updateValues(value, date, 0), true)}
+            showSecond={typeof showTime === 'object' && showTime.showSecond}
             onFocus={(e) => {
               setActivePickerIndex(0);
               onFocus?.(e);
@@ -301,6 +329,7 @@ function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
             value={end}
             disabled={disabled?.[1]}
             use12Hours={use12Hours}
+            showSecond={typeof showTime === 'object' && showTime.showSecond}
             generateConfig={generateConfig}
             onSelect={(date: DateType) => onChange(updateValues(value, date, 1), true)}
             onFocus={(e) => {
