@@ -2,7 +2,6 @@ import type { Locale } from '../interface';
 
 const locale: Locale = {
   locale: 'zh_TW',
-
   today: '今天',
   now: '此刻',
   backToToday: '返回今天',
@@ -28,6 +27,7 @@ const locale: Locale = {
   nextDecade: '下一年代',
   previousCentury: '上一世紀',
   nextCentury: '下一世紀',
+  dateRangeLabels: ['开始时间', '结束时间'],
 };
 
 export default locale;

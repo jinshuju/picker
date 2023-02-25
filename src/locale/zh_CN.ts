@@ -27,6 +27,7 @@ const locale: Locale = {
   nextDecade: '下一年代',
   previousCentury: '上一世纪',
   nextCentury: '下一世纪',
+  dateRangeLabels: ['开始时间', '结束时间'],
 };
 
 export default locale;

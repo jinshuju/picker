@@ -28,6 +28,7 @@ const locale: Locale = {
   nextDecade: 'Next decade',
   previousCentury: 'Last century',
   nextCentury: 'Next century',
+  dateRangeLabels: ['Start Time', 'End Time'],
 };
 
 export default locale;

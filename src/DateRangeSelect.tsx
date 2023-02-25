@@ -251,7 +251,7 @@ function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
   return (
     <div className={`${prefixCls}-quantum`}>
       <div className={`${prefixCls}-quantum-item ${prefixCls}-quantum-start`}>
-        <div className={`${prefixCls}-quantum-label`}>开始时间</div>
+        <div className={`${prefixCls}-quantum-label`}>{locale.dateRangeLabels[0]}</div>
         <div className={`${prefixCls}-quantum-content`}>
           <input
             disabled={disabled?.[0]}
@@ -281,7 +281,7 @@ function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
         </div>
       </div>
       <div className={`${prefixCls}-quantum-item ${prefixCls}-quantum-end`}>
-        <div className={`${prefixCls}-quantum-label`}>结束时间</div>
+        <div className={`${prefixCls}-quantum-label`}>{locale.dateRangeLabels[1]}</div>
         <div className={`${prefixCls}-quantum-content`}>
           <input
             disabled={disabled?.[1]}

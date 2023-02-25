@@ -39,6 +39,7 @@ export type Locale = {
 
   shortWeekDays?: string[];
   shortMonths?: string[];
+  dateRangeLabels?: [string, string]
 };
 
 export type PanelMode = 'time' | 'date' | 'week' | 'month' | 'quarter' | 'year' | 'decade';
