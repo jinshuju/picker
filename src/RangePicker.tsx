@@ -127,7 +127,6 @@ export type RangePickerSharedProps<DateType> = {
   /** @private Internal control of active picker. Do not use since it's private usage */
   activePickerIndex?: 0 | 1;
   dateRender?: RangeDateRender<DateType>;
-  selectPrefixCls: string;
   panelRender?: (originPanel: React.ReactNode) => React.ReactNode;
 };
 
@@ -161,6 +160,7 @@ export type RangePickerBaseProps<DateType> = {} & RangePickerSharedProps<DateTyp
 
 export type RangePickerDateProps<DateType> = {
   showTime?: boolean | RangeShowTimeObject<DateType>;
+  selectPrefixCls?: string;
 } & RangePickerSharedProps<DateType> &
   OmitPickerProps<PickerDateProps<DateType>>;
 
