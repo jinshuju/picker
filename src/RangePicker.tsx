@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import type { SelectProps } from 'rc-select';
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
 import warning from 'rc-util/lib/warning';
 import * as React from 'react';
@@ -160,7 +161,7 @@ export type RangePickerBaseProps<DateType> = {} & RangePickerSharedProps<DateTyp
 
 export type RangePickerDateProps<DateType> = {
   showTime?: boolean | RangeShowTimeObject<DateType>;
-  selectPrefixCls?: string;
+  timeSelectProps?: SelectProps;
 } & RangePickerSharedProps<DateType> &
   OmitPickerProps<PickerDateProps<DateType>>;
 
@@ -186,7 +187,7 @@ type MergedRangePickerProps<DateType> = {
 function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
   const {
     prefixCls = 'rc-picker',
-    selectPrefixCls = 'rc-select',
+    timeSelectProps,
     id,
     style,
     className,
@@ -1020,7 +1021,7 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
                 open={mergedOpen}
                 disabled={mergedDisabled}
                 prefixCls={prefixCls}
-                selectPrefixCls={selectPrefixCls}
+                timeSelectProps={timeSelectProps}
                 onTextChange={onTextChange}
                 setActivePickerIndex={setMergedActivePickerIndex}
                 onChange={(newValue, notNext) => {

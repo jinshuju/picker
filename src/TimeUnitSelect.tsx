@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import type { SelectProps } from 'rc-select';
 import Select, { Option } from 'rc-select';
 import * as React from 'react';
 import { useRef } from 'react';
@@ -11,7 +12,7 @@ export type Unit = {
 
 export type TimeUnitSelectProps = {
   prefixCls: string;
-  selectPrefixCls: string;
+  timeSelectProps?: SelectProps;
   className?: string;
   units: Unit[];
   value?: number;
@@ -22,10 +23,11 @@ export type TimeUnitSelectProps = {
 };
 
 function TimeUnitSelect(props: TimeUnitSelectProps) {
-  const { prefixCls, selectPrefixCls, units, onChange, onFocus, disabled, className, value } =
+  const { prefixCls, timeSelectProps, units, onChange, onFocus, disabled, className, value } =
     props;
 
   const selectRef = useRef<HTMLDivElement>(null);
+  const selectPrefixCls = timeSelectProps?.prefixCls ?? 'rc-select';
 
   return (
     <div
@@ -34,15 +36,16 @@ function TimeUnitSelect(props: TimeUnitSelectProps) {
       style={{ position: 'relative' }}
     >
       <Select
-        prefixCls={selectPrefixCls}
         className={`${prefixCls}-select`}
+        showArrow
+        showSearch
+        {...timeSelectProps}
+        prefixCls={selectPrefixCls}
         getPopupContainer={() => selectRef.current}
         value={value}
-        showSearch
         disabled={disabled}
         onChange={onChange}
         onFocus={onFocus}
-        showArrow
       >
         {units!.map((unit) => {
           return (

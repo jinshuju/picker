@@ -7,6 +7,7 @@
 @input-placeholder-color: hsv(0, 0, 75%);
 
 .placeholder(@color: @input-placeholder-color) {
+
   // Firefox
   &::-moz-placeholder {
     opacity: 1; // Override Firefox's unusual default opacity; see https://github.com/twbs/bootstrap/pull/11526
@@ -31,6 +32,7 @@
   &-focused {
     border: 1px solid blue;
   }
+
   &-panel {
     display: inline-block;
     vertical-align: top;
@@ -66,7 +68,7 @@
   &-header {
     display: flex;
 
-    > * {
+    >* {
       flex: none;
     }
 
@@ -74,7 +76,7 @@
       flex: auto;
       text-align: center;
 
-      > button {
+      >button {
         padding: 0;
         border: 0;
       }
@@ -114,13 +116,15 @@
       color: #333;
     }
 
-    &-in-range > &-inner {
+    &-in-range>&-inner {
       background: fade(blue, 5%);
     }
+
     &-range-hover-start,
     &-range-hover-end,
     &-range-hover {
       position: relative;
+
       &::after {
         position: absolute;
         top: 3px;
@@ -138,16 +142,18 @@
     &-range-hover-start::after {
       border-left: 1px solid green !important;
     }
+
     &-range-hover-end::after {
       border-right: 1px solid green !important;
     }
 
-    &-today > &-inner {
+    &-today>&-inner {
       border: 1px solid blue;
     }
-    &-range-start > &-inner,
-    &-range-end > &-inner,
-    &-selected > &-inner {
+
+    &-range-start>&-inner,
+    &-range-end>&-inner,
+    &-selected>&-inner {
       background: fade(blue, 20%);
     }
   }
@@ -174,7 +180,7 @@
     overflow: hidden;
     list-style: none;
 
-    > li {
+    >li {
       display: inline-block;
     }
   }
@@ -233,8 +239,8 @@
       font-size: 12px;
     }
 
-    .@{prefix-cls}-cell:hover > .@{prefix-cls}-cell-inner,
-    .@{prefix-cls}-cell-selected > .@{prefix-cls}-cell-inner {
+    .@{prefix-cls}-cell:hover>.@{prefix-cls}-cell-inner,
+    .@{prefix-cls}-cell-selected>.@{prefix-cls}-cell-inner {
       background: transparent;
     }
   }
@@ -275,7 +281,7 @@
         overflow-y: auto;
       }
 
-      > li {
+      >li {
         margin: 0;
         padding: 0;
         cursor: pointer;
@@ -320,6 +326,7 @@
 
     // Keyboard
     &-active {
+
       .@{prefix-cls}-date-panel,
       .@{prefix-cls}-time-panel {
         opacity: 0.3;
@@ -341,13 +348,13 @@
       text-align: right;
     }
 
-    > input {
+    >input {
       width: 100%;
       .placeholder();
     }
 
     &-placeholder {
-      > input {
+      >input {
         color: @input-placeholder-color;
       }
     }
@@ -392,6 +399,7 @@
         transform: rotate(135deg);
       }
     }
+
     &-placement-bottomLeft,
     &-placement-bottomright {
       .@{prefix-cls}-range-arrow {
@@ -438,6 +446,7 @@
         border: @arrow-size / 2 solid blue;
         border-color: blue blue transparent transparent;
       }
+
       &::after {
         width: @arrow-size - 2px;
         height: @arrow-size - 2px;
@@ -520,8 +529,12 @@
   }
 
   &:not(:last-child) {
-    margin-right: 7px;
+    margin-right: 3px;
   }
+}
+
+.@{prefix-cls}-unit-separator {
+  margin-right: 3px;
 }
 
 .@{prefix-cls}-quantum-content {

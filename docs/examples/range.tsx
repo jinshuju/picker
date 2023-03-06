@@ -68,7 +68,7 @@ export default () => {
             locale={zhCN}
             allowClear
             ref={rangePickerRef}
-            showTime
+            showTime={{ showSecond: true }}
             style={{ width: 580 }}
             ranges={{
               ranges: [moment(), moment().add(10, 'day')],

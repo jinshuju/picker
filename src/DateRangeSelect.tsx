@@ -1,3 +1,4 @@
+import type { SelectProps } from 'rc-select';
 import useMemo from 'rc-util/lib/hooks/useMemo';
 import * as React from 'react';
 import { useEffect } from 'react';
@@ -58,7 +59,7 @@ const secondStep = 1;
 
 type TimeSelectProps<DateType> = {
   prefixCls: string;
-  selectPrefixCls: string;
+  timeSelectProps?: SelectProps;
   value: DateType;
   use12Hours?: boolean;
   showSecond?: boolean;
@@ -78,7 +79,7 @@ function TimeSelect<DateType>(props: TimeSelectProps<DateType>) {
     onSelect,
     onFocus,
     prefixCls,
-    selectPrefixCls,
+    timeSelectProps,
   } = props;
   const { hour, isPM, minute, second } = React.useMemo(
     () => getTimeInfo<DateType>(value, generateConfig, { use12Hours }),
@@ -134,7 +135,7 @@ function TimeSelect<DateType>(props: TimeSelectProps<DateType>) {
     <div className={`${prefixCls}-datetime-select`}>
       <TimeUnitSelect
         prefixCls={prefixCls}
-        selectPrefixCls={selectPrefixCls}
+        timeSelectProps={timeSelectProps}
         className={`${prefixCls}-unit-select`}
         value={hour}
         units={hours}
@@ -144,9 +145,10 @@ function TimeSelect<DateType>(props: TimeSelectProps<DateType>) {
         }}
         onFocus={onFocus}
       />
+      <span className={`${prefixCls}-unit-separator`}>:</span>
       <TimeUnitSelect
         prefixCls={prefixCls}
-        selectPrefixCls={selectPrefixCls}
+        timeSelectProps={timeSelectProps}
         className={`${prefixCls}-unit-select`}
         value={minute}
         units={minutes}
@@ -157,18 +159,21 @@ function TimeSelect<DateType>(props: TimeSelectProps<DateType>) {
         onFocus={onFocus}
       />
       {showSecond && (
-        <TimeUnitSelect
-          selectPrefixCls={selectPrefixCls}
-          className={`${prefixCls}-unit-select`}
-          prefixCls={prefixCls}
-          value={second}
-          units={seconds}
-          disabled={disabled}
-          onChange={(num) => {
-            onSelect(setTime(isPM, hour, minute, num), 'mouse');
-          }}
-          onFocus={onFocus}
-        />
+        <>
+          <span className={`${prefixCls}-unit-separator`}>:</span>
+          <TimeUnitSelect
+            timeSelectProps={timeSelectProps}
+            className={`${prefixCls}-unit-select`}
+            prefixCls={prefixCls}
+            value={second}
+            units={seconds}
+            disabled={disabled}
+            onChange={(num) => {
+              onSelect(setTime(isPM, hour, minute, num), 'mouse');
+            }}
+            onFocus={onFocus}
+          />
+        </>
       )}
     </div>
   );
@@ -176,7 +181,7 @@ function TimeSelect<DateType>(props: TimeSelectProps<DateType>) {
 
 export type DateRangeSelectProps<DateType> = {
   prefixCls: string;
-  selectPrefixCls: string;
+  timeSelectProps?: SelectProps;
   value?: RangeValue<DateType>;
   index?: 0 | 1;
   generateConfig: GenerateConfig<DateType>;
@@ -223,7 +228,7 @@ function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
     components,
     setActivePickerIndex,
     prefixCls,
-    selectPrefixCls,
+    timeSelectProps,
   } = props;
   const start = getValue(value, 0);
   const end = getValue(value, 1);
@@ -314,7 +319,7 @@ function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
           />
           <TimeSelect
             prefixCls={prefixCls}
-            selectPrefixCls={selectPrefixCls}
+            timeSelectProps={timeSelectProps}
             value={start}
             generateConfig={generateConfig}
             disabled={disabled?.[0]}
@@ -346,7 +351,7 @@ function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
           />
           <TimeSelect
             prefixCls={prefixCls}
-            selectPrefixCls={selectPrefixCls}
+            timeSelectProps={timeSelectProps}
             value={end}
             disabled={disabled?.[1]}
             use12Hours={use12Hours}
