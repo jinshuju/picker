@@ -243,6 +243,7 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
     direction,
     activePickerIndex,
     autoComplete = 'off',
+    presetsHeader,
   } = props as MergedRangePickerProps<DateType>;
 
   const needConfirmButton: boolean = picker === 'time';
@@ -814,6 +815,16 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
       panelHoverRangedValue = hoverRangedValue;
     }
 
+    let panelShowTime: boolean | SharedTimeProps<DateType> | undefined =
+      showTime as SharedTimeProps<DateType>;
+    if (showTime && typeof showTime === 'object' && showTime.defaultValue) {
+      const timeDefaultValues: DateType[] = showTime.defaultValue!;
+      panelShowTime = {
+        ...showTime,
+        defaultValue: getValue(timeDefaultValues, mergedActivePickerIndex) || undefined,
+      };
+    }
+
     let panelDateRender: DateRender<DateType> | null = null;
     if (dateRender) {
       panelDateRender = (date, today) =>
@@ -836,6 +847,7 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
           {...panelProps}
           dateRender={panelDateRender}
           showTime={false}
+          showTimeDefaultValue={panelShowTime?.defaultValue}
           mode={mergedModes[mergedActivePickerIndex]}
           generateConfig={generateConfig}
           style={undefined}
@@ -994,6 +1006,7 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
         <PresetPanel
           prefixCls={prefixCls}
           presets={presetList}
+          presetsHeader={presetsHeader}
           onClick={(nextValue) => {
             triggerChange(nextValue, null);
             triggerConfirm(nextValue);

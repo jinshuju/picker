@@ -59,6 +59,7 @@ export type PickerSharedProps<DateType> = {
   id?: string;
 
   presets?: PresetDate<DateType>[];
+  presetsHeader?: React.ReactNode;
 
   // Value
   format?: string | CustomFormat<DateType> | (string | CustomFormat<DateType>)[];
@@ -182,6 +183,7 @@ function InnerPicker<DateType>(props: PickerProps<DateType>) {
     direction,
     autoComplete = 'off',
     inputRender,
+    presetsHeader,
   } = props as MergedPickerProps<DateType>;
 
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -417,6 +419,7 @@ function InnerPicker<DateType>(props: PickerProps<DateType>) {
       <PresetPanel
         prefixCls={prefixCls}
         presets={presetList}
+        presetsHeader={presetsHeader}
         onClick={(nextValue) => {
           triggerChange(nextValue);
           triggerOpen(false);

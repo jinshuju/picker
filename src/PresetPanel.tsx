@@ -6,10 +6,11 @@ export interface PresetPanelProps<T> {
   presets: PresetDate<T>[];
   onClick: (value: T) => void;
   onHover?: (value: T) => void;
+  presetsHeader?: React.ReactNode;
 }
 
 export default function PresetPanel<T>(props: PresetPanelProps<T>) {
-  const { prefixCls, presets, onClick, onHover } = props;
+  const { prefixCls, presets, presetsHeader, onClick, onHover } = props;
 
   if (!presets.length) {
     return null;
@@ -17,6 +18,7 @@ export default function PresetPanel<T>(props: PresetPanelProps<T>) {
 
   return (
     <div className={`${prefixCls}-presets`}>
+      {presetsHeader}
       <ul>
         {presets.map(({ label, value }, index) => (
           <li

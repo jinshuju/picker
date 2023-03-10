@@ -68,11 +68,15 @@ export default () => {
             locale={zhCN}
             allowClear
             ref={rangePickerRef}
-            showTime={{ showSecond: true }}
+            showTime={{
+              showSecond: true,
+              defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
+            }}
             style={{ width: 580 }}
             ranges={{
               ranges: [moment(), moment().add(10, 'day')],
             }}
+            presetsHeader={<div>快速查看</div>}
             onOk={(dates) => {
               console.log('OK!!!', dates);
             }}

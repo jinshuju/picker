@@ -11,7 +11,7 @@ import Picker from '../../src/Picker';
 const defaultValue = moment('2019-11-28 01:02:03');
 
 export default () => {
-  const [value, setValue] = React.useState<Moment | null | string>(defaultValue);
+  const [value, setValue] = React.useState<Moment | null | string>();
   const weekRef = React.useRef<Picker<Moment>>(null);
 
   const onSelect = (newValue: Moment | string) => {
@@ -42,6 +42,7 @@ export default () => {
         value: 'tomorrow',
       },
     ],
+    presetsHeader: <div>快速查看</div>,
   };
 
   const keyDown = (e, preventDefault) => {
