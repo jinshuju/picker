@@ -21,6 +21,10 @@ export type Locale = {
   clear: string;
   month: string;
   year: string;
+  date: string;
+  hour: string;
+  minute: string;
+  second: string;
   previousMonth: string;
   nextMonth: string;
   monthSelect: string;

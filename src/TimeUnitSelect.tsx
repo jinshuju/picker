@@ -18,13 +18,23 @@ export type TimeUnitSelectProps = {
   value?: number;
   active?: boolean;
   disabled?: boolean;
+  placeholder?: React.ReactNode;
   onChange?: (value: number) => void;
   onFocus?: React.FocusEventHandler<HTMLElement>;
 };
 
 function TimeUnitSelect(props: TimeUnitSelectProps) {
-  const { prefixCls, timeSelectProps, units, onChange, onFocus, disabled, className, value } =
-    props;
+  const {
+    prefixCls,
+    placeholder,
+    timeSelectProps,
+    units,
+    onChange,
+    onFocus,
+    disabled,
+    className,
+    value,
+  } = props;
 
   const selectRef = useRef<HTMLDivElement>(null);
   const selectPrefixCls = timeSelectProps?.prefixCls ?? 'rc-select';
@@ -43,9 +53,11 @@ function TimeUnitSelect(props: TimeUnitSelectProps) {
         prefixCls={selectPrefixCls}
         getPopupContainer={() => selectRef.current}
         value={value}
+        placeholder={placeholder}
         disabled={disabled}
         onChange={onChange}
         onFocus={onFocus}
+        notFoundContent={null}
       >
         {units!.map((unit) => {
           return (

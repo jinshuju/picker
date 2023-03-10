@@ -1,6 +1,6 @@
-import type * as React from 'react';
-import { useState, useEffect, useRef } from 'react';
 import KeyCode from 'rc-util/lib/KeyCode';
+import type * as React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { addGlobalMouseDownEvent, getTargetFromEvent } from '../utils/uiUtil';
 
 export default function usePickerInput({
@@ -128,6 +128,7 @@ export default function usePickerInput({
           onSubmit();
         }
       }
+
       setFocused(false);
 
       if (onBlur) {
@@ -160,9 +161,10 @@ export default function usePickerInput({
           // TODO: Maybe until mouse up then trigger 'onBlur' event
           setTimeout(() => {
             preventBlurRef.current = false;
-          }, 2000)
+          }, 2000);
         } else if (!focused || clickedOutside) {
           triggerOpen(false);
+          setFocused(false);
         }
       }
     }),

@@ -1037,7 +1037,16 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
               <div className={`${prefixCls}-operation`}>
                 <Button
                   className={`${prefixCls}-confirm-btn`}
-                  onClick={() => triggerConfirm(selectedValue)}
+                  onClick={() => {
+                    triggerConfirm(selectedValue);
+                    if (mergedActivePickerIndex === 0) {
+                      startInputRef.current.focus();
+                    }
+
+                    if (mergedActivePickerIndex === 1) {
+                      endInputRef.current.focus();
+                    }
+                  }}
                   disabled={!selectedValue?.[0] || !selectedValue?.[1]}
                   size="middle"
                 >
@@ -1184,7 +1193,8 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
           ref={containerRef}
           className={classNames(prefixCls, `${prefixCls}-range`, className, {
             [`${prefixCls}-disabled`]: mergedDisabled[0] && mergedDisabled[1],
-            [`${prefixCls}-focused`]: mergedActivePickerIndex === 0 ? startFocused : endFocused,
+            [`${prefixCls}-focused`]:
+              (mergedActivePickerIndex === 0 ? startFocused : endFocused) || mergedOpen,
             [`${prefixCls}-rtl`]: direction === 'rtl',
           })}
           style={style}

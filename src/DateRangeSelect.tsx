@@ -1,5 +1,6 @@
 import type { SelectProps } from 'rc-select';
 import useMemo from 'rc-util/lib/hooks/useMemo';
+import KeyCode from 'rc-util/lib/KeyCode';
 import * as React from 'react';
 import { useEffect } from 'react';
 import type { GenerateConfig } from './generate';
@@ -61,6 +62,7 @@ type TimeSelectProps<DateType> = {
   prefixCls: string;
   timeSelectProps?: SelectProps;
   value: DateType;
+  locale: Locale;
   use12Hours?: boolean;
   showSecond?: boolean;
   generateConfig?: GenerateConfig<DateType>;
@@ -76,6 +78,7 @@ function TimeSelect<DateType>(props: TimeSelectProps<DateType>) {
     generateConfig,
     showSecond,
     disabled,
+    locale,
     onSelect,
     onFocus,
     prefixCls,
@@ -139,6 +142,7 @@ function TimeSelect<DateType>(props: TimeSelectProps<DateType>) {
         className={`${prefixCls}-unit-select`}
         value={hour}
         units={hours}
+        placeholder={locale.hour}
         disabled={disabled}
         onChange={(num) => {
           onSelect(setTime(isPM, num, minute, second), 'mouse');
@@ -152,6 +156,7 @@ function TimeSelect<DateType>(props: TimeSelectProps<DateType>) {
         className={`${prefixCls}-unit-select`}
         value={minute}
         units={minutes}
+        placeholder={locale.minute}
         disabled={disabled}
         onChange={(num) => {
           onSelect(setTime(isPM, hour, num, second), 'mouse');
@@ -166,6 +171,7 @@ function TimeSelect<DateType>(props: TimeSelectProps<DateType>) {
             className={`${prefixCls}-unit-select`}
             prefixCls={prefixCls}
             value={second}
+            placeholder={locale.second}
             units={seconds}
             disabled={disabled}
             onChange={(num) => {
@@ -312,6 +318,13 @@ function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
             onChange={(e) => {
               triggerStartTextChange(e.target.value);
             }}
+            placeholder={locale.date}
+            onKeyDown={(e) => {
+              if (e.which === KeyCode.ENTER) {
+                resetStartText();
+                e.preventDefault();
+              }
+            }}
             onFocus={(e) => {
               setActivePickerIndex(0);
               onFocus?.(e);
@@ -321,6 +334,7 @@ function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
             prefixCls={prefixCls}
             timeSelectProps={timeSelectProps}
             value={start}
+            locale={locale}
             generateConfig={generateConfig}
             disabled={disabled?.[0]}
             use12Hours={use12Hours}
@@ -341,8 +355,15 @@ function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
             className={`${prefixCls}-day-input`}
             readOnly={inputReadOnly}
             value={endText}
+            placeholder={locale.date}
             onChange={(e) => {
               triggerEndTextChange(e.target.value);
+            }}
+            onKeyDown={(e) => {
+              if (e.which === KeyCode.ENTER) {
+                resetStartText();
+                e.preventDefault();
+              }
             }}
             onFocus={(e) => {
               setActivePickerIndex(1);
@@ -353,6 +374,7 @@ function DateRangeSelect<DateType>(props: DateRangeSelectProps<DateType>) {
             prefixCls={prefixCls}
             timeSelectProps={timeSelectProps}
             value={end}
+            locale={locale}
             disabled={disabled?.[1]}
             use12Hours={use12Hours}
             showSecond={typeof showTime === 'object' && showTime.showSecond}

@@ -9,6 +9,10 @@ const locale: Locale = {
   clear: 'Xóa',
   month: 'Tháng',
   year: 'Năm',
+  date: '日期',
+  hour: '时',
+  minute: '分',
+  second: '秒',
   timeSelect: 'Chọn thời gian',
   dateSelect: 'Chọn ngày',
   weekSelect: 'Chọn tuần',
@@ -28,6 +32,7 @@ const locale: Locale = {
   nextDecade: 'Thập kỷ sau',
   previousCentury: 'Thế kỷ trước',
   nextCentury: 'Thế kỷ sau',
+  dateRangeLabels: ['开始时间', '结束时间'],
 };
 
 export default locale;

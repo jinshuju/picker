@@ -9,6 +9,10 @@ const locale: Locale = {
   clear: 'Toza',
   month: 'Oy',
   year: 'Yil',
+  date: '日期',
+  hour: '时',
+  minute: '分',
+  second: '秒',
   timeSelect: 'vaqtni tanlang',
   dateSelect: 'sanani tanlang',
   weekSelect: 'Haftani tanlang',
@@ -28,6 +32,7 @@ const locale: Locale = {
   nextDecade: 'Keyingi o\'n yil',
   previousCentury: 'O\'tgan asr',
   nextCentury: 'Keyingi asr',
+  dateRangeLabels: ['开始时间', '结束时间'],
 };
 
 export default locale;
