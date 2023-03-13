@@ -669,7 +669,10 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
     },
   });
 
-  const [startInputProps, { focused: startFocused, typing: startTyping }] = usePickerInput({
+  const [
+    startInputProps,
+    { focused: startFocused, setFocused: setStartFocused, typing: startTyping },
+  ] = usePickerInput({
     ...getSharedInputHookProps(0, resetStartText),
     open: startOpen,
     value: startText,
@@ -678,14 +681,15 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
     },
   });
 
-  const [endInputProps, { focused: endFocused, typing: endTyping }] = usePickerInput({
-    ...getSharedInputHookProps(1, resetEndText),
-    open: endOpen,
-    value: endText,
-    onKeyDown: (e, preventDefault) => {
-      onKeyDown?.(e, preventDefault);
-    },
-  });
+  const [endInputProps, { focused: endFocused, setFocused: setEndFocused, typing: endTyping }] =
+    usePickerInput({
+      ...getSharedInputHookProps(1, resetEndText),
+      open: endOpen,
+      value: endText,
+      onKeyDown: (e, preventDefault) => {
+        onKeyDown?.(e, preventDefault);
+      },
+    });
 
   // ========================== Click Picker ==========================
   const onPickerClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -1011,6 +1015,11 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
             triggerChange(nextValue, null);
             triggerConfirm(nextValue);
             triggerOpen(false, mergedActivePickerIndex);
+            if (mergedActivePickerIndex === 0) {
+              setStartFocused(false);
+            } else {
+              setEndFocused(false);
+            }
           }}
           onHover={(hoverValue) => {
             setRangeHoverValue(hoverValue);

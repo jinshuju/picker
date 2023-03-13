@@ -27,7 +27,10 @@ export default function usePickerInput({
   onCancel: () => void;
   onFocus?: React.FocusEventHandler<HTMLInputElement>;
   onBlur?: React.FocusEventHandler<HTMLInputElement>;
-}): [React.DOMAttributes<HTMLInputElement>, { focused: boolean; typing: boolean }] {
+}): [
+  React.DOMAttributes<HTMLInputElement>,
+  { focused: boolean; typing: boolean; setFocused: any },
+] {
   const [typing, setTyping] = useState(false);
   const [focused, setFocused] = useState(false);
 
@@ -162,13 +165,16 @@ export default function usePickerInput({
           setTimeout(() => {
             preventBlurRef.current = false;
           }, 2000);
-        } else if (!focused || clickedOutside) {
+        } else {
           triggerOpen(false);
-          setFocused(false);
+
+          if (focused) {
+            setFocused(false);
+          }
         }
       }
     }),
   );
 
-  return [inputProps, { focused, typing }];
+  return [inputProps, { focused, typing, setFocused }];
 }
