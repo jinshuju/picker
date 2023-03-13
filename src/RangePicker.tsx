@@ -220,6 +220,7 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
     allowEmpty,
     allowClear,
     suffixIcon,
+    prefixIcon,
     clearIcon,
     pickerRef,
     inputReadOnly,
@@ -1119,6 +1120,11 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
     suffixNode = <span className={`${prefixCls}-suffix`}>{suffixIcon}</span>;
   }
 
+  let prefixNode: React.ReactNode;
+  if (prefixIcon) {
+    prefixNode = <span className={`${prefixCls}-prefix`}>{prefixIcon}</span>;
+  }
+
   let clearNode: React.ReactNode;
   if (
     allowClear &&
@@ -1227,6 +1233,7 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
           onMouseUp={onMouseUp}
           {...getDataOrAriaProps(props)}
         >
+          {prefixNode}
           <div
             className={classNames(`${prefixCls}-input`, {
               [`${prefixCls}-input-active`]: mergedActivePickerIndex === 0,

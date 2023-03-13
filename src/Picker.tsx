@@ -66,6 +66,7 @@ export type PickerSharedProps<DateType> = {
 
   // Render
   suffixIcon?: React.ReactNode;
+  prefixIcon?: React.ReactNode;
   clearIcon?: React.ReactNode;
   prevIcon?: React.ReactNode;
   nextIcon?: React.ReactNode;
@@ -160,6 +161,7 @@ function InnerPicker<DateType>(props: PickerProps<DateType>) {
     open,
     defaultOpen,
     defaultOpenValue,
+    prefixIcon,
     suffixIcon,
     clearIcon,
     disabled,
@@ -469,6 +471,11 @@ function InnerPicker<DateType>(props: PickerProps<DateType>) {
     suffixNode = <span className={`${prefixCls}-suffix`}>{suffixIcon}</span>;
   }
 
+  let prefixNode: React.ReactNode;
+  if (prefixIcon) {
+    prefixNode = <span className={`${prefixCls}-prefix`}>{prefixIcon}</span>;
+  }
+
   let clearNode: React.ReactNode;
   if (allowClear && mergedValue && !disabled) {
     clearNode = (
@@ -579,6 +586,7 @@ function InnerPicker<DateType>(props: PickerProps<DateType>) {
             })}
             ref={inputDivRef}
           >
+            {prefixNode}
             {inputNode}
             {suffixNode}
             {clearNode}

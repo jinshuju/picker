@@ -145,6 +145,7 @@ class Customize extends React.Component<{}, DateRangeState> {
               allowClear
               clearIcon={<span>X</span>}
               suffixIcon={<span>O</span>}
+              prefixIcon={<span>D</span>}
               prevIcon={<span>&lt;</span>}
               nextIcon={<span>&gt;</span>}
               superPrevIcon={<span>&lt;&lt;</span>}
