@@ -252,6 +252,7 @@ function InnerPicker<DateType>(props: PickerProps<DateType>) {
         locale,
         formatList,
         generateConfig,
+        presetList,
       });
       if (inputDate && (!disabledDate || !disabledDate(inputDate))) {
         setSelectedValue(inputDate);
@@ -368,6 +369,7 @@ function InnerPicker<DateType>(props: PickerProps<DateType>) {
         resetText();
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mergedOpen, valueTexts]);
 
   // Change picker should sync back with text value
@@ -375,6 +377,7 @@ function InnerPicker<DateType>(props: PickerProps<DateType>) {
     if (!mergedOpen) {
       resetText();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [picker]);
 
   // Sync innerValue with control mode

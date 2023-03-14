@@ -1,5 +1,12 @@
 import type { GenerateConfig } from '../generate';
-import type { CustomFormat, Locale, NullableDateType, PanelMode, PickerMode } from '../interface';
+import type {
+  CustomFormat,
+  Locale,
+  NullableDateType,
+  PanelMode,
+  PickerMode,
+  PresetDate,
+} from '../interface';
 import { DECADE_UNIT_DIFF } from '../panels/DecadePanel/index';
 
 export const WEEK_DAY_COUNT = 7;
@@ -217,13 +224,24 @@ export function parseValue<DateType>(
     generateConfig,
     locale,
     formatList,
+    presetList,
   }: {
     generateConfig: GenerateConfig<DateType>;
     locale: Locale;
     formatList: (string | CustomFormat<DateType>)[];
+    presetList?: PresetDate<DateType>[];
   },
 ) {
-  if (!value || typeof formatList[0] === 'function') {
+  if (!value) {
+    return null;
+  }
+
+  const selectPreset = presetList?.find((preset) => preset.label === value);
+  if (selectPreset) {
+    return selectPreset.value;
+  }
+
+  if (typeof formatList[0] === 'function') {
     return null;
   }
 
