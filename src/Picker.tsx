@@ -424,6 +424,7 @@ function InnerPicker<DateType>(props: PickerProps<DateType>) {
       <PresetPanel
         prefixCls={prefixCls}
         presets={presetList}
+        selectedValue={selectedValue}
         presetsHeader={presetsHeader}
         onClick={(nextValue) => {
           triggerChange(nextValue);

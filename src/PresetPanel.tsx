@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import * as React from 'react';
 import type { PresetDate } from './interface';
 
@@ -6,11 +7,12 @@ export interface PresetPanelProps<T> {
   presets: PresetDate<T>[];
   onClick: (value: T) => void;
   onHover?: (value: T) => void;
+  selectedValue?: T;
   presetsHeader?: React.ReactNode;
 }
 
 export default function PresetPanel<T>(props: PresetPanelProps<T>) {
-  const { prefixCls, presets, presetsHeader, onClick, onHover } = props;
+  const { prefixCls, presets, presetsHeader, onClick, onHover, selectedValue } = props;
 
   if (!presets.length) {
     return null;
@@ -23,6 +25,9 @@ export default function PresetPanel<T>(props: PresetPanelProps<T>) {
         {presets.map(({ label, value }, index) => (
           <li
             key={index}
+            className={classNames({
+              [`${prefixCls}-preset-active`]: !!selectedValue && selectedValue === value,
+            })}
             onClick={() => {
               onClick(value);
             }}
