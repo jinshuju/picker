@@ -64,6 +64,7 @@ export default () => {
             suffixIcon={<span>O</span>}
             prefixIcon={<span>D</span>}
           />
+          <div />
           <RangePicker<Moment>
             {...sharedProps}
             locale={zhCN}
@@ -82,6 +83,24 @@ export default () => {
               console.log('OK!!!', dates);
             }}
           />
+          <div />
+          <RangePicker<Moment>
+            {...sharedProps}
+            locale={zhCN}
+            allowClear
+            ref={rangePickerRef}
+            showTime
+            style={{ width: 580 }}
+            ranges={{
+              ranges: [moment(), moment().add(10, 'day')],
+            }}
+            format="YYYY-MM-DD HH:mm"
+            presetsHeader={<div>快速查看</div>}
+            onOk={(dates) => {
+              console.log('OK!!!', dates);
+            }}
+          />
+          <div />
           <RangePicker<Moment>
             {...sharedProps}
             value={undefined}
@@ -92,6 +111,7 @@ export default () => {
               test: [moment(), moment().add(1, 'hour')],
             }}
           />
+          <div />
           <RangePicker<Moment>
             {...sharedProps}
             value={undefined}
