@@ -323,6 +323,7 @@ function InnerPicker<DateType>(props: PickerProps<DateType>) {
     blurToCancel: needConfirmButton,
     open: mergedOpen,
     value: text,
+    inputRef,
     triggerOpen,
     forwardKeyDown,
     isClickOutside: (target) =>

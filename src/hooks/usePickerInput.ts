@@ -15,6 +15,7 @@ export default function usePickerInput({
   onCancel,
   onFocus,
   onBlur,
+  inputRef,
 }: {
   open: boolean;
   value: string;
@@ -27,6 +28,7 @@ export default function usePickerInput({
   onCancel: () => void;
   onFocus?: React.FocusEventHandler<HTMLInputElement>;
   onBlur?: React.FocusEventHandler<HTMLInputElement>;
+  inputRef?: React.MutableRefObject<HTMLInputElement>;
 }): [
   React.DOMAttributes<HTMLInputElement>,
   { focused: boolean; typing: boolean; setFocused: any },
@@ -159,7 +161,7 @@ export default function usePickerInput({
 
         if (!clickedOutside) {
           preventBlurRef.current = true;
-
+          inputRef?.current.blur();
           // Always set back in case `onBlur` prevented by user
           // TODO: Maybe until mouse up then trigger 'onBlur' event
           setTimeout(() => {

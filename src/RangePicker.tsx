@@ -678,6 +678,7 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
     ...getSharedInputHookProps(0, resetStartText),
     open: startOpen,
     value: startText,
+    inputRef: startInputRef,
     onKeyDown: (e, preventDefault) => {
       onKeyDown?.(e, preventDefault);
     },
@@ -691,6 +692,7 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
       onKeyDown: (e, preventDefault) => {
         onKeyDown?.(e, preventDefault);
       },
+      inputRef: endInputRef,
     });
 
   // ========================== Click Picker ==========================
