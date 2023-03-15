@@ -19,6 +19,7 @@ export default () => {
           disabledHours: () => [1, 2, 3, 4, 5, 6],
         })}
         locale={zhCN}
+        prefixIcon={<span>D</span>}
         generateConfig={momentGenerateConfig}
       />
 
@@ -26,6 +27,7 @@ export default () => {
       <Picker
         defaultValue={defaultValue}
         picker="time"
+        prefixIcon={<span>D</span>}
         locale={zhCN}
         disabledTime={(now) => ({
           disabledHours: () => [now.hours()],

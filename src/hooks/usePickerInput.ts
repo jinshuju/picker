@@ -164,7 +164,7 @@ export default function usePickerInput({
           // TODO: Maybe until mouse up then trigger 'onBlur' event
           setTimeout(() => {
             preventBlurRef.current = false;
-          }, 2000);
+          }, 0);
         } else {
           triggerOpen(false);
 
