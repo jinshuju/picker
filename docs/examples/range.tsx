@@ -62,7 +62,7 @@ export default () => {
             defaultValue={[moment('1990-09-03'), moment('1989-11-28')]}
             clearIcon={<span>X</span>}
             suffixIcon={<span>O</span>}
-            prefixIcon={<span>D</span>}
+            prefixIcon={<span>DDDDD</span>}
           />
           <div />
           <RangePicker<Moment>

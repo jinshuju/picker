@@ -260,6 +260,7 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
   const startInputRef = useRef<HTMLInputElement>(null);
   const endInputRef = useRef<HTMLInputElement>(null);
   const arrowRef = useRef<HTMLDivElement>(null);
+  const prefixRef = useRef<HTMLDivElement>(null);
 
   // ============================ Warning ============================
   if (process.env.NODE_ENV !== 'production') {
@@ -905,8 +906,8 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
     );
   }
 
-  let arrowLeft: number = 0;
-  let panelLeft: number = 0;
+  let arrowLeft: number = prefixRef?.current?.offsetWidth ?? 0;
+  let panelLeft: number = prefixRef?.current?.offsetWidth ?? 0;
   if (
     mergedActivePickerIndex &&
     startInputDivRef.current &&
@@ -914,7 +915,10 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
     panelDivRef.current
   ) {
     // Arrow offset
-    arrowLeft = startInputDivRef.current.offsetWidth + separatorRef.current.offsetWidth;
+    arrowLeft =
+      startInputDivRef.current.offsetWidth +
+      separatorRef.current.offsetWidth +
+      (prefixRef?.current?.offsetWidth ?? 0);
 
     // If panelWidth - arrowWidth - arrowMarginLeft < arrowLeft, panel should move to right side.
     // If arrowOffsetLeft > arrowLeft, arrowMarginLeft = arrowOffsetLeft - arrowLeft
@@ -1074,7 +1078,6 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
                     }
                   }}
                   disabled={!selectedValue?.[0] || !selectedValue?.[1]}
-                  size="middle"
                 >
                   {locale.ok}
                 </Button>
@@ -1125,7 +1128,11 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
 
   let prefixNode: React.ReactNode;
   if (prefixIcon) {
-    prefixNode = <span className={`${prefixCls}-prefix`}>{prefixIcon}</span>;
+    prefixNode = (
+      <span className={`${prefixCls}-prefix`} ref={prefixRef}>
+        {prefixIcon}
+      </span>
+    );
   }
 
   let clearNode: React.ReactNode;
@@ -1170,6 +1177,7 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
   let activeBarWidth: number = 0;
   if (startInputDivRef.current && endInputDivRef.current && separatorRef.current) {
     if (mergedActivePickerIndex === 0) {
+      activeBarLeft = arrowLeft;
       activeBarWidth = startInputDivRef.current.offsetWidth;
     } else {
       activeBarLeft = arrowLeft;
