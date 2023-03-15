@@ -422,6 +422,17 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
     }, 0);
   }
 
+  function closeOpenAndFocus(index: 0 | 1) {
+    triggerOpen(false, index);
+    // Use setTimeout to make sure panel DOM exists
+    setTimeout(() => {
+      const inputRef = [startInputRef, endInputRef][index];
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 0);
+  }
+
   function triggerChange(newValue: RangeValue<DateType>, sourceIndex: 0 | 1, notNext?: boolean) {
     let values = newValue;
     let startValue = getValue(values, 0);
@@ -494,7 +505,7 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
       // Delay to focus to avoid input blur trigger expired selectedValues
       triggerOpenAndFocus(nextOpenIndex);
     } else if (!showTime) {
-      triggerOpen(false, sourceIndex);
+      closeOpenAndFocus(sourceIndex);
       triggerConfirm(values);
     }
   }

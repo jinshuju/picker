@@ -430,6 +430,7 @@ function InnerPicker<DateType>(props: PickerProps<DateType>) {
         onClick={(nextValue) => {
           triggerChange(nextValue);
           triggerOpen(false);
+          inputRef.current.focus();
         }}
       />
       <PickerPanel<DateType>
@@ -542,6 +543,7 @@ function InnerPicker<DateType>(props: PickerProps<DateType>) {
       // triggerChange will also update selected values
       triggerChange(date);
       triggerOpen(false);
+      inputRef.current.focus()
     }
   };
   const popupPlacement = direction === 'rtl' ? 'bottomRight' : 'bottomLeft';
