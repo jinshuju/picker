@@ -22,8 +22,8 @@ export default function useCellClassName<DateType>({
   ) => boolean;
   offsetCell: (date: DateType, offset: number) => DateType;
   isInView: (date: DateType) => boolean;
-  rangedValue?: RangeValue<DateType>;
-  hoverRangedValue?: RangeValue<DateType>;
+  rangedValue?: Exclude<RangeValue<DateType>, string>;
+  hoverRangedValue?: Exclude<RangeValue<DateType>, string>;
   today?: NullableDateType<DateType>;
   value?: NullableDateType<DateType>;
 }) {

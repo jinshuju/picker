@@ -19,6 +19,7 @@ export default () => {
     defaultStartValue,
     defaultEndValue,
   ]);
+  // const [value, setValue] = React.useState<[Moment | null, Moment | null] | string | null>('today');
   const onChange = (
     newValue: [Moment | null, Moment | null] | string | null,
     formatStrings?: string[],
@@ -34,11 +35,27 @@ export default () => {
     console.log('Calendar Change:', newValue, formatStrings);
   };
 
+  const presets: any = [
+    {
+      label: 'Range!',
+      value: [moment(), moment().add(10, 'day')],
+    },
+    {
+      label: '今天',
+      value: 'today',
+    },
+    {
+      label: '明天',
+      value: 'tomorrow',
+    },
+  ];
+
   const sharedProps = {
     generateConfig: momentGenerateConfig,
     value,
     onChange,
     onCalendarChange,
+    presets,
   };
 
   const rangePickerRef = React.useRef<RangePicker<Moment>>(null);
@@ -56,14 +73,21 @@ export default () => {
 
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         <div style={{ margin: '0 8px' }}>
-          <h3>Basic</h3>
+          <h3>Presets</h3>
           <RangePicker<Moment>
             {...sharedProps}
-            value={undefined}
             locale={zhCN}
             allowClear
             ref={rangePickerRef}
-            defaultValue={[moment('1990-09-03'), moment('1989-11-28')]}
+            showTime={{
+              showSecond: true,
+              defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
+            }}
+            style={{ width: 580 }}
+            presetsHeader={<div>快速查看</div>}
+            onOk={(dates) => {
+              console.log('OK!!!', dates);
+            }}
             clearIcon={<span>X</span>}
             suffixIcon={<span>O</span>}
             prefixIcon={<span>DDDDD</span>}
@@ -71,11 +95,16 @@ export default () => {
           <div />
           <RangePicker<Moment>
             {...sharedProps}
-            value={undefined}
             locale={zhCN}
             allowClear
-            picker="time"
-            style={{ width: 280 }}
+            ref={rangePickerRef}
+            showTime
+            style={{ width: 580 }}
+            format="YYYY-MM-DD HH:mm"
+            presetsHeader={<div>快速查看</div>}
+            onOk={(dates) => {
+              console.log('OK!!!', dates);
+            }}
           />
         </div>
         <div style={{ margin: '0 8px' }}>
@@ -99,7 +128,7 @@ export default () => {
 
         <div style={{ margin: '0 8px' }}>
           <h3>Year</h3>
-          <RangePicker<Moment> {...sharedProps} locale={zhCN} picker="year" />
+          <RangePicker<Moment> {...sharedProps} locale={zhCN} picker="year" presets={presets} />
         </div>
 
         <div style={{ margin: '0 8px' }}>
@@ -114,7 +143,7 @@ export default () => {
 
         <div style={{ margin: '0 8px' }}>
           <h3>Week</h3>
-          <RangePicker<Moment> {...sharedProps} locale={zhCN} picker="week" />
+          <RangePicker<Moment> {...sharedProps} locale={zhCN} picker="week" presets={presets} />
         </div>
 
         <div style={{ margin: '0 8px' }}>

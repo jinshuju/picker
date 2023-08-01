@@ -188,13 +188,13 @@ function TimeSelect<DateType>(props: TimeSelectProps<DateType>) {
 export type DateRangeSelectProps<DateType> = {
   prefixCls: string;
   timeSelectProps?: SelectProps;
-  value?: RangeValue<DateType>;
+  value?: Exclude<RangeValue<DateType>, string>;
   index?: 0 | 1;
   generateConfig: GenerateConfig<DateType>;
   locale: Locale;
   disabled?: [boolean, boolean];
   inputReadOnly?: boolean;
-  onChange?: (values: RangeValue<DateType>, notNext?: boolean) => void;
+  onChange?: (values: Exclude<RangeValue<DateType>, string>, notNext?: boolean) => void;
   use12Hours?: boolean;
   showTime?: boolean | RangeShowTimeObject<DateType>;
   onTextChange?: (newText: string, index: 0 | 1, dateFormat?: string) => void;

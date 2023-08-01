@@ -1,8 +1,4 @@
-export function leftPad(
-  str: string | number,
-  length: number,
-  fill: string = '0',
-) {
+export function leftPad(str: string | number, length: number, fill: string = '0') {
   let current = String(str);
   while (current.length < length) {
     current = `${fill}${str}`;
@@ -23,7 +19,7 @@ export function toArray<T>(val: T | T[]): T[] {
 export default function getDataOrAriaProps(props: any) {
   const retProps: any = {};
 
-  Object.keys(props).forEach(key => {
+  Object.keys(props).forEach((key) => {
     if (
       (key.substr(0, 5) === 'data-' ||
         key.substr(0, 5) === 'aria-' ||
@@ -38,10 +34,7 @@ export default function getDataOrAriaProps(props: any) {
   return retProps;
 }
 
-export function getValue<T>(
-  values: null | undefined | (T | null)[],
-  index: number,
-): T | null {
+export function getValue<T>(values: null | undefined | (T | null)[], index: number): T | null {
   return values ? values[index] : null;
 }
 
@@ -52,19 +45,14 @@ export function updateValues<T, R = [T | null, T | null] | null>(
   value: T | UpdateValue<T>,
   index: number,
 ): R {
-  const newValues: [T | null, T | null] = [
-    getValue(values, 0),
-    getValue(values, 1),
-  ];
+  const newValues: [T | null, T | null] = [getValue(values, 0), getValue(values, 1)];
 
   newValues[index] =
-    typeof value === 'function'
-      ? (value as UpdateValue<T | null>)(newValues[index])
-      : value;
+    typeof value === 'function' ? (value as UpdateValue<T | null>)(newValues[index]) : value;
 
   if (!newValues[0] && !newValues[1]) {
-    return (null as unknown) as R;
+    return null as unknown as R;
   }
 
-  return (newValues as unknown) as R;
+  return newValues as unknown as R;
 }

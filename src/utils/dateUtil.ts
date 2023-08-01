@@ -229,7 +229,7 @@ export function parseValue<DateType>(
     generateConfig: GenerateConfig<DateType>;
     locale: Locale;
     formatList: (string | CustomFormat<DateType>)[];
-    presetList?: PresetDate<DateType>[];
+    presetList?: PresetDate<DateType | string | [DateType, DateType]>[];
   },
 ) {
   if (!value) {
@@ -237,7 +237,7 @@ export function parseValue<DateType>(
   }
 
   const selectPreset = presetList?.find((preset) => preset.label === value);
-  if (selectPreset) {
+  if (selectPreset && typeof selectPreset.value === 'string') {
     return selectPreset.value;
   }
 

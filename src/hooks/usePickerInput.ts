@@ -161,7 +161,7 @@ export default function usePickerInput({
 
         if (!clickedOutside) {
           preventBlurRef.current = true;
-          inputRef?.current.blur();
+          inputRef?.current?.blur();
           // Always set back in case `onBlur` prevented by user
           // TODO: Maybe until mouse up then trigger 'onBlur' event
           setTimeout(() => {

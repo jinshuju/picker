@@ -34,7 +34,7 @@ function getStartEndDistance<DateType>(
 }
 
 function getRangeViewDate<DateType>(
-  values: RangeValue<DateType>,
+  values: Exclude<RangeValue<DateType>, string>,
   index: 0 | 1,
   picker: PickerMode,
   generateConfig: GenerateConfig<DateType>,
@@ -67,15 +67,15 @@ export default function useRangeViewDates<DateType>({
   defaultDates,
   generateConfig,
 }: {
-  values: RangeValue<DateType>;
+  values: Exclude<RangeValue<DateType>, string>;
   picker: PickerMode;
-  defaultDates: RangeValue<DateType> | undefined;
+  defaultDates: Exclude<RangeValue<DateType>, string> | undefined;
   generateConfig: GenerateConfig<DateType>;
 }): [(activePickerIndex: 0 | 1) => DateType, (viewDate: DateType | null, index: 0 | 1) => void] {
   const [defaultViewDates, setDefaultViewDates] = React.useState<
     [DateType | null, DateType | null]
   >(() => [getValue(defaultDates, 0), getValue(defaultDates, 1)]);
-  const [viewDates, setInternalViewDates] = React.useState<RangeValue<DateType>>(null);
+  const [viewDates, setInternalViewDates] = React.useState<Exclude<RangeValue<DateType>, string>>(null);
 
   const startDate = getValue(values, 0);
   const endDate = getValue(values, 1);

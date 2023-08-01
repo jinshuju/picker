@@ -7,7 +7,7 @@ import { formatValue, isEqual } from '../utils/dateUtil';
 export type ValueTextConfig<DateType> = {
   formatList: (string | CustomFormat<DateType>)[];
   generateConfig: GenerateConfig<DateType>;
-  presetList?: PresetDate<DateType>[];
+  presetList?: PresetDate<DateType | string | [DateType, DateType]>[];
   locale: Locale;
 };
 

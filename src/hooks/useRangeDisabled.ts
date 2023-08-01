@@ -14,7 +14,7 @@ export default function useRangeDisabled<DateType>(
     generateConfig,
   }: {
     picker: PickerMode;
-    selectedValue: RangeValue<DateType>;
+    selectedValue: Exclude<RangeValue<DateType>, string>;
     disabledDate?: (date: DateType) => boolean;
     disabled: [boolean, boolean];
     locale: Locale;

@@ -7,7 +7,7 @@ export type RangeContextProps = {
    * Panel only has one value, this is only style effect.
    */
   rangedValue?: [NullableDateType<any>, NullableDateType<any>] | null;
-  hoverRangedValue?: RangeValue<any>;
+  hoverRangedValue?: Exclude<RangeValue<any>, string>;
   inRange?: boolean;
   panelPosition?: 'left' | 'right' | false;
 };

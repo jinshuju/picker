@@ -43,7 +43,7 @@ export type Locale = {
   hour?: string;
   minute?: string;
   second?: string;
-  dateRangeLabels?: [string, string]
+  dateRangeLabels?: [string, string];
 };
 
 export type PanelMode = 'time' | 'date' | 'week' | 'month' | 'quarter' | 'year' | 'decade';
@@ -98,7 +98,7 @@ export type DisabledTime<DateType> = (date: DateType | null) => DisabledTimes;
 export type OnPanelChange<DateType> = (value: DateType, mode: PanelMode) => void;
 
 export type EventValue<DateType> = DateType | null;
-export type RangeValue<DateType> = [EventValue<DateType>, EventValue<DateType>] | null;
+export type RangeValue<DateType> = [EventValue<DateType>, EventValue<DateType>] | string | null;
 
 export type Components = {
   button?: React.ComponentType | string;

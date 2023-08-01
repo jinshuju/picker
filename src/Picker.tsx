@@ -254,6 +254,11 @@ function InnerPicker<DateType>(props: PickerProps<DateType>) {
         generateConfig,
         presetList,
       });
+
+      if (typeof inputDate === 'string') {
+        return setSelectedValue(inputDate as DateType);
+      }
+
       if (inputDate && (!disabledDate || !disabledDate(inputDate))) {
         setSelectedValue(inputDate);
       }
