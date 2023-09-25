@@ -47,7 +47,6 @@ function TimeUnitSelect(props: TimeUnitSelectProps) {
     >
       <Select
         className={`${prefixCls}-select`}
-        showArrow
         showSearch
         {...timeSelectProps}
         prefixCls={selectPrefixCls}
