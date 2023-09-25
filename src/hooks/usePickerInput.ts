@@ -168,7 +168,7 @@ export default function usePickerInput({
             preventBlurRef.current = false;
           }, 0);
         } else {
-          triggerOpen(false);
+          onSubmit();
 
           if (focused) {
             setFocused(false);

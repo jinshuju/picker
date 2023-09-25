@@ -717,8 +717,6 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
       }
 
       triggerChange(selectedValue, index);
-      triggerConfirm(selectedValue);
-      resetText();
     },
     onCancel: () => {
       triggerOpen(false, index);
