@@ -1368,7 +1368,7 @@ function InnerRangePicker<DateType>(props: RangePickerProps<DateType>) {
                   readOnly={inputReadOnly || typeof formatList[0] === 'function' || !endTyping}
                   value={endText}
                   onChange={(e) => {
-                    triggerEndTextChange(e.target.value);
+                    triggerEndTextChange((e.target.value || '').replaceAll('：', ':'));
                   }}
                   placeholder={getValue(placeholder, 1) || ''}
                   ref={endInputRef}
